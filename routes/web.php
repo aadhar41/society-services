@@ -116,6 +116,31 @@ Route::prefix('flat')->group(function () {
     )->name('flat.delete');
 });
 
+// Route Group For Maintenance Module.
+Route::prefix('maintenance')->group(function () {
+    // Maintenance Module
+    Route::get('/create', [App\Http\Controllers\MaintenanceController::class, 'create'])->name('admin.maintenance.create');
+    Route::post('/store', [App\Http\Controllers\MaintenanceController::class, 'store'])->name('admin.maintenance.store');
+    Route::get('/{payment}/edit', [App\Http\Controllers\MaintenanceController::class, 'edit'])->name('admin.maintenance.edit');
+    Route::put('/update/{payment}', [App\Http\Controllers\MaintenanceController::class, 'update'])->name('admin.maintenance.update');
+    Route::get('/list', [App\Http\Controllers\MaintenanceController::class, 'index'])->name('admin.maintenance.list');
+    Route::get('/show/{id}', [App\Http\Controllers\MaintenanceController::class, 'show'])->name('admin.maintenance.show');
+
+    Route::get('/enable/{id}', [App\Http\Controllers\MaintenanceController::class, 'enable'])->name('admin.maintenance.enable');
+    Route::get('/disable/{id}', [App\Http\Controllers\MaintenanceController::class, 'disable'])->name('admin.maintenance.disable');
+
+    Route::get(
+        '/datatable',
+        [App\Http\Controllers\MaintenanceController::class, 'datatable']
+    )->name('maintenance.datatables');
+
+    Route::get(
+        '/delete/{id}',
+        [App\Http\Controllers\MaintenanceController::class, 'destroy']
+    )->name('maintenance.delete');
+});
+
+
 
 // Route Group For Payment Module.
 // Route::prefix('payment')->group(function () {
@@ -141,28 +166,6 @@ Route::prefix('flat')->group(function () {
 // });
 
 
-// Route Group For Maintenance Module.
-// Route::prefix('maintenance')->group(function () {
-//     // Maintenance Module
-//     Route::get('/create', [App\Http\Controllers\MaintenanceController::class, 'create'])->name('admin.maintenance.create');
-//     Route::post('/store', [App\Http\Controllers\MaintenanceController::class, 'store'])->name('admin.maintenance.store');
-//     Route::get('/{payment}/edit', [App\Http\Controllers\MaintenanceController::class, 'edit'])->name('admin.maintenance.edit');
-//     Route::put('/update/{payment}', [App\Http\Controllers\MaintenanceController::class, 'update'])->name('admin.maintenance.update');
-//     Route::get('/list', [App\Http\Controllers\MaintenanceController::class, 'index'])->name('admin.maintenance.list');
-
-//     Route::get('/enable/{id}', [App\Http\Controllers\MaintenanceController::class, 'enable'])->name('admin.maintenance.enable');
-//     Route::get('/disable/{id}', [App\Http\Controllers\MaintenanceController::class, 'disable'])->name('admin.maintenance.disable');
-
-//     Route::get(
-//         '/datatable',
-//         [App\Http\Controllers\MaintenanceController::class, 'datatable']
-//     )->name('maintenance.datatables');
-
-//     Route::get(
-//         '/delete/{id}',
-//         [App\Http\Controllers\MaintenanceController::class, 'destroy']
-//     )->name('maintenance.delete');
-// });
 
 
 // Ajax Route

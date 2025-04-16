@@ -47,7 +47,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="flat_no">Flat No :</label>
-                                                <input type="number" minlength="1" maxlength="10" name="flat_no" value="{{ old('flat_no') }}" id="flat_no" class="form-control {{ $errors->has('flat_no') ? 'is-invalid' : '' }}" placeholder="Flat No" autocomplete="off" />
+                                                <input type="text" name="flat_no" value="{{ old('flat_no') }}" id="flat_no" class="form-control {{ $errors->has('flat_no') ? 'is-invalid' : '' }}" placeholder="Flat No" autocomplete="off" />
                                                 @if($errors->has('flat_no'))
                                                 <div class="invalid-feedback">
                                                     <strong>{{ $errors->first('flat_no') }}</strong>

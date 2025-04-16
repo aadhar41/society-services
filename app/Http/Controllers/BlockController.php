@@ -224,7 +224,7 @@ class BlockController extends Controller
 
     /**
      * Disable the specified block in storage.
-     * 
+     *
      * @param $id
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Block  $block

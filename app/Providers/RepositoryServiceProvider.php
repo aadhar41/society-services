@@ -6,8 +6,10 @@ use Illuminate\Support\ServiceProvider;
 use App\Interfaces\SocietyRepositoryInterface;
 use App\Repositories\SocietyRepository;
 use App\Interfaces\BlockRepositoryInterface;
+use App\Interfaces\FlatRepositoryInterface;
 use App\Interfaces\PlotRepositoryInterface;
 use App\Repositories\BlockRepository;
+use App\Repositories\FlatRepository;
 use App\Repositories\PlotRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -22,6 +24,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SocietyRepositoryInterface::class, SocietyRepository::class);
         $this->app->bind(BlockRepositoryInterface::class, BlockRepository::class);
         $this->app->bind(PlotRepositoryInterface::class, PlotRepository::class);
+        $this->app->bind(FlatRepositoryInterface::class, FlatRepository::class);
     }
 
     /**
