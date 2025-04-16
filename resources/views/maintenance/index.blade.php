@@ -117,7 +117,6 @@
 
 
 <script>
-    
     var oTable = $('#maintenance-table').DataTable({
         lengthMenu: [
             [10, 25, 50, 100, 250, 500, -1],
@@ -184,7 +183,18 @@
             },
             {
                 data: 'payment_status',
-                name: 'payment_status'
+                name: 'payment_status',
+                render: function(data, type, full, meta) {
+                    if (data == 'Complete') {
+                        return "<span class='right badge badge-success p-1'>" + data + "</span>";
+                    } 
+                    if(data == 'Pending') {
+                        return "<span class='right badge badge-warning p-1'>" + data + "</span>";
+                    } 
+                    if(data == 'Extra') {
+                        return "<span class='right badge badge-danger p-1'>" + data + "</span>";
+                    }
+                }
             },
             {
                 data: 'status',

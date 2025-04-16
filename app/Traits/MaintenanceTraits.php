@@ -36,7 +36,7 @@ trait MaintenanceTraits
      */
     public function society()
     {
-        return $this->belongsTo('App\Models\Society', 'society_id')->select("id", "unique_code", "name")->where("status", "1");
+        return $this->belongsTo('App\Models\Society', 'society_id')->select("id", "unique_code", "name", "address", "contact", "description", "country", "state", "city", "postcode")->where("status", "1");
     }
 
     /**
@@ -46,7 +46,7 @@ trait MaintenanceTraits
      */
     public function block()
     {
-        return $this->belongsTo('App\Models\Block', 'block_id')->select("id", "unique_code", "name")->where("status", "1");
+        return $this->belongsTo('App\Models\Block', 'block_id')->select("id", "unique_code", "name", "total_flats", "description")->where("status", "1");
     }
 
     /**
@@ -56,7 +56,7 @@ trait MaintenanceTraits
      */
     public function plot()
     {
-        return $this->belongsTo('App\Models\Plot', 'plot_id')->select("id", "unique_code", "name")->where("status", "1");
+        return $this->belongsTo('App\Models\Plot', 'plot_id')->select("id", "unique_code", "name", "total_floors", "total_flats", "description")->where("status", "1");
     }
 
     /**
@@ -66,7 +66,7 @@ trait MaintenanceTraits
      */
     public function flat()
     {
-        return $this->belongsTo('App\Models\Flat', 'flat_id')->select("id", "unique_code", "name")->where("status", "1");
+        return $this->belongsTo('App\Models\Flat', 'flat_id')->select("id", "unique_code", "name", "flat_no", "description", "mobile_no", "property_type", "tenant_name", "tenant_contact")->where("status", "1");
     }
 
     /**

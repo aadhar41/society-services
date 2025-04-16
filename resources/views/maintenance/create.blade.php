@@ -93,8 +93,8 @@
                                                 <label for="flat">Flat :</label>
                                                 <select name="flat" id="flat" class="form-control select2 {{ $errors->has('flat') ? 'is-invalid' : '' }}">
                                                     <option value="">Select</option>
-                                                    @foreach($flats as $id => $name)
-                                                    <option value="{{ $id }}" {{ (old("flat") == $id ? "selected":"") }}>{{ ucwords($name) }}</option>
+                                                    @foreach($flatDetails as $key => $value)
+                                                    <option value="{{ $value->id }}" {{ (old("flat") == $value->id ? "selected":"") }}>{{ ucwords($value->name) }} ( {{ $value->flat_no }} )</option>
                                                     @endforeach
                                                 </select>
                                                 @if($errors->has('flat'))

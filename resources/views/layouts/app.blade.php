@@ -16,7 +16,15 @@
     <script type="text/javascript" src="{{ URL::asset('js/common.js') }}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
-    
+    <style>
+        .nav-item {
+            text-transform: capitalize;
+        }
+
+        .maintenance-img {
+            object-fit: cover;
+        }
+    </style>
     @yield('third_party_stylesheets')
 
     @stack('page_css')

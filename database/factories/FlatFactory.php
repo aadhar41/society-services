@@ -32,7 +32,7 @@ class FlatFactory extends Factory
             'plot_id' => Plot::pluck('id')->random(),
             'name' => $this->faker->company(),
             'slug' => $this->faker->sentence(),
-            'flat_no' => rand(2, 5),
+            'flat_no' => Str::random(3),
             'description' => $this->faker->realText($maxNbChars = 100, $indexSize = 2),
             'mobile_no' => $this->faker->phoneNumber(),
             'property_type' => "1",
