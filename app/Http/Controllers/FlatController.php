@@ -14,17 +14,21 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\PlotStoreRequest;
 use PhpParser\Node\Expr\Print_;
+use App\Interfaces\FlatRepositoryInterface;
 
 class FlatController extends Controller
 {
+    private FlatRepositoryInterface $flatRepositoryInterface;
+
     /**
      * Apply default authentication middleware for backend routes.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(FlatRepositoryInterface $flatRepositoryInterface)
     {
         $this->middleware('auth');
+        $this->flatRepositoryInterface = $flatRepositoryInterface;
     }
 
     /**
@@ -36,7 +40,7 @@ class FlatController extends Controller
     {
         $title = "flats";
         $module = "flat";
-        $data = Flat::active()->latest()->get();
+        $data = $this->flatRepositoryInterface->getAllFlats();
         return view('flat.index', compact('data', 'title', 'module'));
     }
 
@@ -175,11 +179,13 @@ class FlatController extends Controller
     public function store(Request $request)
     {
         try {
+            // request()->merge(['user_id' => Auth::user()->id]);
+            // request()->merge(['society_id' => $request->input('society')]);
+            // request()->merge(['block_id' => $request->input('block')]);
+            // request()->merge(['plot_id' => $request->input('plot')]);
+            // Flat::create(request()->only(["name", "user_id", "society_id", "block_id", "plot_id", "flat_no", "mobile_no", "property_type", "tenant_name", "tenant_contact", "description"]));
             request()->merge(['user_id' => Auth::user()->id]);
-            request()->merge(['society_id' => $request->input('society')]);
-            request()->merge(['block_id' => $request->input('block')]);
-            request()->merge(['plot_id' => $request->input('plot')]);
-            Flat::create(request()->only(["name", "user_id", "society_id", "block_id", "plot_id", "flat_no", "mobile_no", "property_type", "tenant_name", "tenant_contact", "description"]));
+            $this->flatRepositoryInterface->createFlat(request()->all());
             return redirect()->route('admin.flat.list')->with('success', __('messages.create_success'));
         } catch (\Exception $e) {
             return redirect()->route('admin.flat.create')->with('error', $e->getMessage());
@@ -213,7 +219,7 @@ class FlatController extends Controller
             $blocks = getBlocks();
             $plots = getPlots();
             $propertyTypes = getPropertyTypes();
-            return view('flat.edit', compact('listings','title', 'module', 'societies', 'blocks', 'plots', 'propertyTypes'));
+            return view('flat.edit', compact('listings', 'title', 'module', 'societies', 'blocks', 'plots', 'propertyTypes'));
         } catch (\Exception $e) {
             return redirect()->route('admin.flat.edit')->with('error', $e->getMessage());
         }
