@@ -160,6 +160,18 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="new_road_outstanding">New Road Outstanding :</label>
+                                                <input type="number" step="0.01" name="new_road_outstanding" value="{{ old('new_road_outstanding', 0) }}" id="new_road_outstanding" class="form-control {{ $errors->has('new_road_outstanding') ? 'is-invalid' : '' }}" placeholder="0.00" autocomplete="off" />
+                                                @if($errors->has('new_road_outstanding'))
+                                                <div class="invalid-feedback">
+                                                    <strong>{{ $errors->first('new_road_outstanding') }}</strong>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="description">Description</label>

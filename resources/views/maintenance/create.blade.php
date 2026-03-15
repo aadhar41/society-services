@@ -208,6 +208,37 @@
                                             </div>
                                         </div>
 
+                                        <!-- Payment Mode -->
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <label for="payment_mode">Payment Mode :</label>
+                                                <select name="payment_mode" id="payment_mode" class="form-control select2 {{ $errors->has('payment_mode') ? 'is-invalid' : '' }}">
+                                                    <option value="">Select Mode</option>
+                                                    <option value="Cash" {{ old('payment_mode') == 'Cash' ? 'selected' : '' }}>Cash</option>
+                                                    <option value="Cheque" {{ old('payment_mode') == 'Cheque' ? 'selected' : '' }}>Cheque</option>
+                                                    <option value="Online" {{ old('payment_mode') == 'Online' ? 'selected' : '' }}>Online</option>
+                                                </select>
+                                                @if($errors->has('payment_mode'))
+                                                <div class="invalid-feedback">
+                                                    <strong>{{ $errors->first('payment_mode') }}</strong>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <!-- Transaction Id -->
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <label for="transaction_id">Transaction Id :</label>
+                                                <input type="text" name="transaction_id" value="{{ old('transaction_id') }}" id="transaction_id" class="form-control {{ $errors->has('transaction_id') ? 'is-invalid' : '' }}" placeholder="Transaction Id" autocomplete="off" />
+                                                @if($errors->has('transaction_id'))
+                                                <div class="invalid-feedback">
+                                                    <strong>{{ $errors->first('transaction_id') }}</strong>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+
                                         <!-- Attachments -->
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                             <div class="form-group">

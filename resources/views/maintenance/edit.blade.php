@@ -4,7 +4,7 @@
 
 @include('partials._select2Assests')
 
-<form action="{{ route('admin.plot.update', $listings->id) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.maintenance.update', $listings->id) }}" method="POST" enctype="multipart/form-data">
     {{ method_field('PUT') }}
     @csrf
 
@@ -25,19 +25,7 @@
                         <div class="card-body">
                             <div class="row">
 
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="form-group">
-                                        <label for="name">Name</label>
-                                        <input type="text" name="name" value="{{ old('name', $listings->name) }}" id="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" placeholder="Name" autocomplete="off" />
-                                        @if($errors->has('name'))
-                                        <div class="invalid-feedback">
-                                            <strong>{{ $errors->first('name') }}</strong>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-4">
+                                <div class="col-lg-3 col-md-3">
                                     <div class="form-group">
                                         <label for="society">Society :</label>
                                         <select name="society" id="society" class="form-control select2 {{ $errors->has('society') ? 'is-invalid' : '' }}">
@@ -54,7 +42,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-4">
+                                <div class="col-lg-3 col-md-3">
                                     <div class="form-group">
                                         <label for="block">Block :</label>
                                         <select name="block" id="block" class="form-control select2 {{ $errors->has('block') ? 'is-invalid' : '' }}">
@@ -71,25 +59,166 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-4">
+                                <div class="col-lg-3 col-md-3">
                                     <div class="form-group">
-                                        <label for="total_flats">Total Flats :</label>
-                                        <input type="number" minlength="1" maxlength="10" name="total_flats" value="{{ old('total_flats', $listings->total_flats) }}" id="total_flats" class="form-control {{ $errors->has('total_flats') ? 'is-invalid' : '' }}" placeholder="Total Flats" autocomplete="off" />
-                                        @if($errors->has('total_flats'))
+                                        <label for="plot">Plot :</label>
+                                        <select name="plot" id="plot" class="form-control select2 {{ $errors->has('plot') ? 'is-invalid' : '' }}">
+                                            <option value="">Select</option>
+                                            @foreach($plots as $id => $name)
+                                            <option value="{{ $id }}" {{ (old("plot", $listings->plot_id) == $id ? "selected":"") }}>{{ ucwords($name) }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('plot'))
                                         <div class="invalid-feedback">
-                                            <strong>{{ $errors->first('total_flats') }}</strong>
+                                            <strong>{{ $errors->first('plot') }}</strong>
                                         </div>
                                         @endif
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-md-4">
+                                <div class="col-lg-3 col-md-3">
                                     <div class="form-group">
-                                        <label for="total_floors">Total Floors :</label>
-                                        <input type="number" minlength="1" maxlength="10" name="total_floors" value="{{ old('total_floors', $listings->total_floors) }}" id="total_floors" class="form-control {{ $errors->has('total_floors') ? 'is-invalid' : '' }}" placeholder="Total Floors" autocomplete="off" />
-                                        @if($errors->has('total_floors'))
+                                        <label for="flat">Flat :</label>
+                                        <select name="flat" id="flat" class="form-control select2 {{ $errors->has('flat') ? 'is-invalid' : '' }}">
+                                            <option value="">Select</option>
+                                            @foreach($flats as $id => $name)
+                                            <option value="{{ $id }}" {{ (old("flat", $listings->flat_id) == $id ? "selected":"") }}>{{ ucwords($name) }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('flat'))
                                         <div class="invalid-feedback">
-                                            <strong>{{ $errors->first('total_floors') }}</strong>
+                                            <strong>{{ $errors->first('flat') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3">
+                                    <div class="form-group">
+                                        <label for="type">Maintenance Type :</label>
+                                        <select name="type" id="type" class="form-control select2 {{ $errors->has('type') ? 'is-invalid' : '' }}">
+                                            <option value="">Select</option>
+                                            @foreach($maintenanceTypes as $id => $name)
+                                            <option value="{{ $id }}" {{ (old("type", $listings->type) == $id ? "selected":"") }}>{{ ucwords($name) }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('type'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('type') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3">
+                                    <div class="form-group">
+                                        <label for="date">Date :</label>
+                                        <input type="date" name="date" value="{{ old('date', $listings->date) }}" id="date" class="form-control {{ $errors->has('date') ? 'is-invalid' : '' }}" placeholder="Date" autocomplete="off" />
+                                        @if($errors->has('date'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('date') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-md-2">
+                                    <div class="form-group">
+                                        <label for="year">Year :</label>
+                                        <input type="number" name="year" value="{{ old('year', $listings->year) }}" id="year" class="form-control {{ $errors->has('year') ? 'is-invalid' : '' }}" placeholder="Year" autocomplete="off" />
+                                        @if($errors->has('year'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('year') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-md-2">
+                                    <div class="form-group">
+                                        <label for="month">Month :</label>
+                                        <select name="month" id="month" class="form-control select2 {{ $errors->has('month') ? 'is-invalid' : '' }}">
+                                            <option value="">Select</option>
+                                            @foreach($months as $id => $name)
+                                            <option value="{{ $id }}" {{ (old("month", $listings->month) == $id ? "selected":"") }}>{{ ucwords($name) }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('month'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('month') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-md-2">
+                                    <div class="form-group">
+                                        <label for="amount">Amount :</label>
+                                        <input type="number" name="amount" value="{{ old('amount', $listings->amount) }}" id="amount" class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}" placeholder="Amount" autocomplete="off" />
+                                        @if($errors->has('amount'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('amount') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3">
+                                    <div class="form-group">
+                                        <label for="payment_status">Payment Status :</label>
+                                        <select name="payment_status" id="payment_status" class="form-control select2 {{ $errors->has('payment_status') ? 'is-invalid' : '' }}">
+                                            <option value="">Select</option>
+                                            @foreach($paymentStatus as $id => $name)
+                                            <option value="{{ $id }}" {{ (old("payment_status", $listings->payment_status) == $id ? "selected":"") }}>{{ ucwords($name) }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('payment_status'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('payment_status') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3">
+                                    <div class="form-group">
+                                        <label for="payment_mode">Payment Mode :</label>
+                                        <select name="payment_mode" id="payment_mode" class="form-control select2 {{ $errors->has('payment_mode') ? 'is-invalid' : '' }}">
+                                            <option value="">Select Mode</option>
+                                            <option value="Cash" {{ old('payment_mode', $listings->payment_mode) == 'Cash' ? 'selected' : '' }}>Cash</option>
+                                            <option value="Cheque" {{ old('payment_mode', $listings->payment_mode) == 'Cheque' ? 'selected' : '' }}>Cheque</option>
+                                            <option value="Online" {{ old('payment_mode', $listings->payment_mode) == 'Online' ? 'selected' : '' }}>Online</option>
+                                        </select>
+                                        @if($errors->has('payment_mode'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('payment_mode') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3">
+                                    <div class="form-group">
+                                        <label for="transaction_id">Transaction Id :</label>
+                                        <input type="text" name="transaction_id" value="{{ old('transaction_id', $listings->transaction_id) }}" id="transaction_id" class="form-control {{ $errors->has('transaction_id') ? 'is-invalid' : '' }}" placeholder="Transaction Id" autocomplete="off" />
+                                        @if($errors->has('transaction_id'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('transaction_id') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3">
+                                    <div class="form-group">
+                                        <label for="attachments">Attachments :</label>
+                                        <input type="file" name="attachments" id="attachments" class="form-control {{ $errors->has('attachments') ? 'is-invalid' : '' }}" />
+                                        @if($listings->attachments)
+                                            <p><a href="{{ asset($listings->attachments) }}" target="_blank">View Current Attachment</a></p>
+                                        @endif
+                                        @if($errors->has('attachments'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('attachments') }}</strong>
                                         </div>
                                         @endif
                                     </div>
@@ -117,17 +246,12 @@
                     <!-- /.card -->
                 </div>
                 <!--/.col (left) -->
-                <!-- right column -->
-                <div class="col-md-6"></div>
-                <!--/.col (right) -->
             </div>
             <!-- /.row -->
         </div>
         <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-
-
 </form>
 
 <script>
@@ -136,4 +260,4 @@
     });
 </script>
 @include('partials._ckeditor')
-@endsection
+@endsection

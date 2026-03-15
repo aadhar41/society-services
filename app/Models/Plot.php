@@ -19,7 +19,7 @@ class Plot extends Model
 
     protected $table = 'plots';
 
-    protected $fillable = ['unique_code', 'user_id', 'society_id', 'block_id', 'name', 'slug', 'total_floors', 'total_flats', 'description', 'status', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['unique_code', 'user_id', 'society_id', 'block_id', 'name', 'slug', 'total_floors', 'total_flats', 'plot_area', 'description', 'status', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $guarded = ["user_id"];
 

@@ -140,6 +140,12 @@ Route::prefix('maintenance')->group(function () {
     )->name('maintenance.delete');
 });
 
+// Route Group For Maintenance Report.
+Route::prefix('maintenance-report')->group(function () {
+    Route::get('/grid', [App\Http\Controllers\MaintenanceReportController::class, 'grid'])->name('admin.maintenance-report.grid');
+    Route::get('/outstanding', [App\Http\Controllers\MaintenanceReportController::class, 'outstanding'])->name('admin.maintenance-report.outstanding');
+});
+
 
 
 // Route Group For Payment Module.

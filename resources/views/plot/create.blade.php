@@ -102,6 +102,18 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="plot_area"> Plot Area </label>
+                                                <input type="text" name="plot_area" value="{{ old('plot_area') }}" id="plot_area" class="form-control {{ $errors->has('plot_area') ? 'is-invalid' : '' }}" placeholder="Enter Plot Area" autocomplete="off" />
+                                                @if($errors->has('plot_area'))
+                                                <div class="invalid-feedback">
+                                                    <strong>{{ $errors->first('plot_area') }}</strong>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="description">Description</label>

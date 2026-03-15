@@ -162,7 +162,7 @@ class PlotController extends Controller
             request()->merge(['user_id' => Auth::user()->id]);
             request()->merge(['society_id' => $request->input('society')]);
             request()->merge(['block_id' => $request->input('block')]);
-            $this->plotRepositoryInterface->createPlot(request()->only(["name", "user_id", "society_id", "block_id", "total_floors", "total_flats", "description"]));
+            $this->plotRepositoryInterface->createPlot(request()->only(["name", "user_id", "society_id", "block_id", "total_floors", "total_flats", "plot_area", "description"]));
             return redirect()->route('admin.plot.list')->with('success', __('messages.create_success'));
         } catch (\Exception $e) {
             return redirect()->route('admin.plot.create')->with('error', $e->getMessage());
@@ -213,7 +213,7 @@ class PlotController extends Controller
             request()->merge(['user_id' => Auth::user()->id]);
             request()->merge(['society_id' => $request->input('society')]);
             request()->merge(['block_id' => $request->input('block')]);
-            $this->plotRepositoryInterface->updatePlot($plot->id, request()->only(["name", "user_id", "society_id", "block_id", "total_floors", "total_flats", "description"]));
+            $this->plotRepositoryInterface->updatePlot($plot->id, request()->only(["name", "user_id", "society_id", "block_id", "total_floors", "total_flats", "plot_area", "description"]));
             return redirect()->route('admin.plot.list')->with('success', __('messages.update_success'));
         } catch (\Exception $e) {
             return redirect()->route('admin.plot.list')->with('error', $e->getMessage());

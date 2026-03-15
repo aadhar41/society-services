@@ -20,26 +20,26 @@ class FlatRepository implements FlatRepositoryInterface
     /**
      * The function "getFlatById" retrieves an active flat by its society ID.
      * 
-     * @param societyId The societyId parameter is the unique identifier of the flat in the database.
+     * @param $id The $id parameter is the unique identifier of the flat in the database.
      * It is used to retrieve a specific flat from the database based on its ID.
      * 
-     * @return Object a single active Flat model instance with the given societyId. If no matching Flat model
+     * @return Object a single active Flat model instance with the given $id. If no matching Flat model
      * is found, it will throw a ModelNotFoundException.
      */
-    public function getFlatById($societyId)
+    public function getFlatById($id)
     {
-        return Flat::active()->findOrFail($societyId);
+        return Flat::active()->findOrFail($id);
     }
 
     /**
      * The deleteFlat function deletes a flat from the database based on the given societyId.
      * 
-     * @param Integer societyId The societyId parameter is the unique identifier of the society or flat that
+     * @param Integer $id The $id parameter is the unique identifier of the flat that
      * you want to delete.
      */
-    public function deleteFlat($societyId)
+    public function deleteFlat($id)
     {
-        Flat::destroy($societyId);
+        Flat::destroy($id);
     }
 
     /**

@@ -27,13 +27,17 @@ class SocietyStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:80',
+            'registration_no' => 'nullable|string|max:50',
             'contact' => 'required|integer|digits:10',
+            'contact_email' => 'nullable|email|max:100',
+            'office_contact' => 'nullable|string|max:50',
             'postcode' => 'required|integer|digits:6',
             'country' => 'required|integer',
             'state' => 'required|integer',
             'city' => 'required|integer',
             'address' => 'required|string|max:250',
             'description' => 'required|string|max:500',
+            'map_link' => 'nullable|string|max:500',
         ];
     }
 

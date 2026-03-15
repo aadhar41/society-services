@@ -29,12 +29,13 @@ class MaintenanceStoreRequest extends FormRequest
             'block' => 'required|integer',
             'plot' => 'required|integer',
             'flat' => 'required|integer',
-            'type' => 'required',
             'date' => 'required',
             'year' => 'required',
             'month' => 'required',
             'amount' => 'required',
             'payment_status' => 'required',
+            'payment_mode' => 'nullable|string|max:20',
+            'transaction_id' => 'nullable|string|max:100',
             'description' => 'required|string|max:600',
         ];
     }
