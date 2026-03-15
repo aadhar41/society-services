@@ -14,17 +14,21 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\PlotStoreRequest;
 use PhpParser\Node\Expr\Print_;
+use App\Interfaces\FlatRepositoryInterface;
 
 class FlatController extends Controller
 {
+    private FlatRepositoryInterface $flatRepositoryInterface;
+
     /**
      * Apply default authentication middleware for backend routes.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(FlatRepositoryInterface $flatRepositoryInterface)
     {
         $this->middleware('auth');
+        $this->flatRepositoryInterface = $flatRepositoryInterface;
     }
 
     /**
@@ -36,7 +40,7 @@ class FlatController extends Controller
     {
         $title = "flats";
         $module = "flat";
-        $data = Flat::active()->latest()->get();
+        $data = $this->flatRepositoryInterface->getAllFlats();
         return view('flat.index', compact('data', 'title', 'module'));
     }
 
@@ -179,7 +183,7 @@ class FlatController extends Controller
             request()->merge(['society_id' => $request->input('society')]);
             request()->merge(['block_id' => $request->input('block')]);
             request()->merge(['plot_id' => $request->input('plot')]);
-            Flat::create(request()->only(["name", "user_id", "society_id", "block_id", "plot_id", "flat_no", "mobile_no", "property_type", "tenant_name", "tenant_contact", "description"]));
+            $this->flatRepositoryInterface->createFlat(request()->all());
             return redirect()->route('admin.flat.list')->with('success', __('messages.create_success'));
         } catch (\Exception $e) {
             return redirect()->route('admin.flat.create')->with('error', $e->getMessage());
@@ -213,7 +217,7 @@ class FlatController extends Controller
             $blocks = getBlocks();
             $plots = getPlots();
             $propertyTypes = getPropertyTypes();
-            return view('flat.edit', compact('listings','title', 'module', 'societies', 'blocks', 'plots', 'propertyTypes'));
+            return view('flat.edit', compact('listings', 'title', 'module', 'societies', 'blocks', 'plots', 'propertyTypes'));
         } catch (\Exception $e) {
             return redirect()->route('admin.flat.edit')->with('error', $e->getMessage());
         }
@@ -233,7 +237,7 @@ class FlatController extends Controller
             request()->merge(['society_id' => $request->input('society')]);
             request()->merge(['block_id' => $request->input('block')]);
             request()->merge(['plot_id' => $request->input('plot')]);
-            Flat::where(['id' => $flat->id])->update(request()->only(["name", "user_id", "society_id", "block_id", "plot_id", "flat_no", "mobile_no", "property_type", "tenant_name", "tenant_contact", "description"]));
+            Flat::where(['id' => $flat->id])->update(request()->only(["name", "user_id", "society_id", "block_id", "plot_id", "flat_no", "mobile_no", "property_type", "tenant_name", "tenant_contact", "description", "new_road_outstanding"]));
             return redirect()->route('admin.flat.list')->with('success', __('messages.update_success'));
         } catch (\Exception $e) {
             return redirect()->route('admin.flat.list')->with('error', $e->getMessage());
@@ -321,8 +325,8 @@ class FlatController extends Controller
         $options = '<option value="">Select</option>';
         if (!empty($_POST['plot_id'])) {
             $getPlotsFlats = getPlotsFlats($_POST['plot_id']);
-            foreach ($getPlotsFlats as $id => $name) {
-                $options .= "<option value='" . $id . "' (old('flat') == " . $id . " ? 'selected':'') >" . ucwords($name) . "</option>";
+            foreach ($getPlotsFlats as $key => $value) {
+                $options .= "<option value='" . $value->id . "' (old('flat') == " . $value->id . " ? 'selected':'') >" . ucwords($value->name) . " ( " . $value->flat_no . " ) </option>";
             }
         }
         echo json_encode(['options' => $options]);

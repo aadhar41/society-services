@@ -40,11 +40,47 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
+                                        <label for="registration_no">Registration No</label>
+                                        <input type="text" name="registration_no" value="{{ old('registration_no', $listings->registration_no) }}" id="registration_no" class="form-control {{ $errors->has('registration_no') ? 'is-invalid' : '' }}" placeholder="Registration No" autocomplete="off" />
+                                        @if($errors->has('registration_no'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('registration_no') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
                                         <label for="contact">Contact :</label>
                                         <input type="number" minlength="10" maxlength="10" name="contact" value="{{ old('contact', $listings->contact) }}" id="contact" class="form-control {{ $errors->has('contact') ? 'is-invalid' : '' }}" placeholder="Contact" autocomplete="off" />
                                         @if($errors->has('contact'))
                                         <div class="invalid-feedback">
                                             <strong>{{ $errors->first('contact') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="contact_email">Contact Email</label>
+                                        <input type="email" name="contact_email" value="{{ old('contact_email', $listings->contact_email) }}" id="contact_email" class="form-control {{ $errors->has('contact_email') ? 'is-invalid' : '' }}" placeholder="Contact Email" autocomplete="off" />
+                                        @if($errors->has('contact_email'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('contact_email') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="office_contact">Office Contact</label>
+                                        <input type="text" name="office_contact" value="{{ old('office_contact', $listings->office_contact) }}" id="office_contact" class="form-control {{ $errors->has('office_contact') ? 'is-invalid' : '' }}" placeholder="Office Contact" autocomplete="off" />
+                                        @if($errors->has('office_contact'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('office_contact') }}</strong>
                                         </div>
                                         @endif
                                     </div>
@@ -121,6 +157,18 @@
                                         @if($errors->has('address'))
                                         <div class="invalid-feedback">
                                             <strong>{{ $errors->first('address') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="map_link">Map Link (Google Maps Embed/URL)</label>
+                                        <input type="text" name="map_link" value="{{ old('map_link', $listings->map_link) }}" id="map_link" class="form-control {{ $errors->has('map_link') ? 'is-invalid' : '' }}" placeholder="Map Link" autocomplete="off" />
+                                        @if($errors->has('map_link'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('map_link') }}</strong>
                                         </div>
                                         @endif
                                     </div>

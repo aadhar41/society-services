@@ -19,7 +19,7 @@ class Society extends Model
 
     protected $table = 'societies';
 
-    protected $fillable = ['unique_code', 'user_id', 'name', 'slug', 'address', 'contact', 'description', 'country', 'state', 'city', 'postcode', 'status', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['unique_code', 'user_id', 'name', 'slug', 'registration_no', 'contact_email', 'office_contact', 'address', 'contact', 'description', 'country', 'state', 'city', 'postcode', 'map_link', 'status', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $guarded = ["user_id"];
 

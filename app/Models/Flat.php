@@ -19,7 +19,7 @@ class Flat extends Model
 
     protected $table = 'flats';
 
-    protected $fillable = ['unique_code', 'user_id', 'society_id', 'block_id', 'plot_id', 'name', 'slug', 'flat_no', 'description', 'mobile_no','property_type','tenant_name','tenant_contact', 'status', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['unique_code', 'user_id', 'society_id', 'block_id', 'plot_id', 'name', 'slug', 'flat_no', 'description', 'mobile_no','property_type','tenant_name','tenant_contact', 'new_road_outstanding', 'status', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $guarded = ["user_id"];
 

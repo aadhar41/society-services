@@ -41,7 +41,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="flat_no">Flat No :</label>
-                                        <input type="number" minlength="1" maxlength="10" name="flat_no" value="{{ old('flat_no') }}" id="flat_no" class="form-control {{ $errors->has('flat_no') ? 'is-invalid' : '' }}" placeholder="Flat No" autocomplete="off" />
+                                        <input type="text" name="flat_no" value="{{ old('flat_no') }}" id="flat_no" class="form-control {{ $errors->has('flat_no') ? 'is-invalid' : '' }}" placeholder="Flat No" autocomplete="off" />
                                         @if($errors->has('flat_no'))
                                         <div class="invalid-feedback">
                                             <strong>{{ $errors->first('flat_no') }}</strong>
@@ -149,6 +149,18 @@
                                         @if($errors->has('tenant_contact'))
                                         <div class="invalid-feedback">
                                             <strong>{{ $errors->first('tenant_contact') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="new_road_outstanding">New Road Outstanding :</label>
+                                        <input type="number" step="0.01" name="new_road_outstanding" value="{{ old('new_road_outstanding', $listings->new_road_outstanding ?? 0) }}" id="new_road_outstanding" class="form-control {{ $errors->has('new_road_outstanding') ? 'is-invalid' : '' }}" placeholder="0.00" autocomplete="off" />
+                                        @if($errors->has('new_road_outstanding'))
+                                        <div class="invalid-feedback">
+                                            <strong>{{ $errors->first('new_road_outstanding') }}</strong>
                                         </div>
                                         @endif
                                     </div>

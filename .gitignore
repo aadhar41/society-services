@@ -17,3 +17,8 @@ yarn-error.log
 /public/assets/*
 /public/uploads/*
 /tests/Backups/*
+<<<<<<< HEAD
+/data/*
+=======
+/data
+>>>>>>> 0ade0dd29a09e8051a40f52ef5eb9420dc4fe139

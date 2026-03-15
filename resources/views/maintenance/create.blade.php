@@ -93,8 +93,8 @@
                                                 <label for="flat">Flat :</label>
                                                 <select name="flat" id="flat" class="form-control select2 {{ $errors->has('flat') ? 'is-invalid' : '' }}">
                                                     <option value="">Select</option>
-                                                    @foreach($flats as $id => $name)
-                                                    <option value="{{ $id }}" {{ (old("flat") == $id ? "selected":"") }}>{{ ucwords($name) }}</option>
+                                                    @foreach($flatDetails as $key => $value)
+                                                    <option value="{{ $value->id }}" {{ (old("flat") == $value->id ? "selected":"") }}>{{ ucwords($value->name) }} ( {{ $value->flat_no }} )</option>
                                                     @endforeach
                                                 </select>
                                                 @if($errors->has('flat'))
@@ -203,6 +203,37 @@
                                                 @if($errors->has('payment_status'))
                                                 <div class="invalid-feedback">
                                                     <strong>{{ $errors->first('payment_status') }}</strong>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <!-- Payment Mode -->
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <label for="payment_mode">Payment Mode :</label>
+                                                <select name="payment_mode" id="payment_mode" class="form-control select2 {{ $errors->has('payment_mode') ? 'is-invalid' : '' }}">
+                                                    <option value="">Select Mode</option>
+                                                    <option value="Cash" {{ old('payment_mode') == 'Cash' ? 'selected' : '' }}>Cash</option>
+                                                    <option value="Cheque" {{ old('payment_mode') == 'Cheque' ? 'selected' : '' }}>Cheque</option>
+                                                    <option value="Online" {{ old('payment_mode') == 'Online' ? 'selected' : '' }}>Online</option>
+                                                </select>
+                                                @if($errors->has('payment_mode'))
+                                                <div class="invalid-feedback">
+                                                    <strong>{{ $errors->first('payment_mode') }}</strong>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <!-- Transaction Id -->
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                            <div class="form-group">
+                                                <label for="transaction_id">Transaction Id :</label>
+                                                <input type="text" name="transaction_id" value="{{ old('transaction_id') }}" id="transaction_id" class="form-control {{ $errors->has('transaction_id') ? 'is-invalid' : '' }}" placeholder="Transaction Id" autocomplete="off" />
+                                                @if($errors->has('transaction_id'))
+                                                <div class="invalid-feedback">
+                                                    <strong>{{ $errors->first('transaction_id') }}</strong>
                                                 </div>
                                                 @endif
                                             </div>

@@ -29,6 +29,7 @@ class PlotStoreRequest extends FormRequest
             'block' => 'required|integer',
             'total_floors' => 'required|integer',
             'total_flats' => 'required|integer',
+            'plot_area' => 'nullable|string|max:50',
             'description' => 'required|string|max:600',
         ];
     }

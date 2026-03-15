@@ -139,7 +139,7 @@
     </ul>
 </li>
 
-<?php /* ?>
+
 <li class="nav-item">
     <a href="#" class="nav-link">
         <i class="nav-icon fas fa-hand-holding-usd"></i>
@@ -161,9 +161,21 @@
                 <p>List</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.maintenance-report.grid') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Record (Grid)</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.maintenance-report.outstanding') }}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Outstanding (Summary)</p>
+            </a>
+        </li>
     </ul>
 </li>
-<?php */ ?>
+
 
 <?php /* ?>
 <li class="nav-item">
