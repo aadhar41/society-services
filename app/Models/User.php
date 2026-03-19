@@ -20,7 +20,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
+        'avatar',
+        'is_superadmin',
     ];
 
     /**
@@ -40,11 +43,17 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
+        'is_superadmin' => 'boolean',
     ];
 
-
+    /**
+     * Societies this user belongs to (ERP multi-tenancy).
+     */
     public function societies()
     {
-        return $this->hasMany(Society::class);
+        return $this->belongsToMany(\App\Domain\Society\Models\Society::class, 'society_user')
+            ->withPivot('role_id', 'joined_at', 'status')
+            ->withTimestamps();
     }
 }
