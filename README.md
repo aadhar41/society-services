@@ -5,211 +5,93 @@
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 ![AdminLTE](https://img.shields.io/badge/AdminLTE-%234285F4.svg?style=for-the-badge&logo=adminlte&logoColor=white)
 
+## 🖼️ Screenshots
+
+| Comprehensive ERP Dashboard | Accounting & Ledger | Society Management |
+| :---: | :---: | :---: |
+| ![Logo Big](public/images/ag-logo-big.png) | ![Logo Small](public/images/ag-logo-small.png) | ![Logo JPG](public/images/ag-logo.jpg) |
+| *Modern Dashboard UI* | *Chart of Accounts* | *Member Profiles* |
+
+---
+
 ## 🚀 Overview
 
-**Society Accounting Management System** is a comprehensive Laravel-based web application designed to streamline the management of residential societies, residential complexes, and apartment buildings. This powerful tool helps administrators efficiently handle accounting, maintenance, resident information, and more, all in one centralized platform.
+**Society Accounting Management System (SAMS)** is a highly scalable, multi-tenant SaaS-based Society ERP. Built with Domain-Driven Design (DDD) principles, it provides robust accounting, automated billing, and a seamless resident experience.
 
-Whether you're managing a small residential complex or a large apartment building, this system provides the tools you need to maintain order, track finances, and communicate effectively with residents.
+---
 
-## ✨ Key Features
+## ✨ Key Features (ERP Foundation)
 
-✅ **Comprehensive Society Management**
-- Create, edit, and manage societies with complete details
-- Track all society-related information in one place
+✅ **Multi-Tenancy & Security**
 
-✅ **Block and Flat Organization**
-- Manage multiple blocks within a society
-- Organize flats within blocks with detailed information
-- Track property types (self-occupied, rented, locked)
+- Shared schema isolation using `society_id` scope.
+- Global `SocietyScope` with automated filtering.
+- JWT/Sanctum based API authentication.
 
-✅ **Maintenance Tracking**
-- Record monthly maintenance charges
-- Track lift maintenance and other contributions
-- Manage donations and other special payments
-- Attach receipts and documents for verification
+✅ **Professional Accounting Engine**
 
-✅ **Resident Information**
-- Maintain detailed resident profiles
-- Track contact information and property details
-- Manage tenant information for rented properties
+- Double-entry bookkeeping system (balanced journal entries).
+- Dynamic Chart of Accounts tailored for Indian Societies.
+- Automated generation of Trial Balance, Balance Sheet, and P&L.
 
-✅ **Financial Management**
-- Record and track all financial transactions
-- Generate invoices and receipts
-- Manage payment statuses (pending, done, extra)
-- Comprehensive reporting and analytics
+✅ **Automated Billing & Recovery**
 
-✅ **Complaint System**
-- Residents can raise complaints
-- Administrators can track and resolve complaints
-- Maintain a history of all complaints
+- Group-based charge generation (Maintenance, Sinking Fund, etc.).
+- Recurring invoice generation with balance tracking.
+- Automated late fee calculation and defaulter reports.
 
-✅ **Notice Board**
-- Post announcements and important notices
-- Share events and society updates
-- Send notifications to residents
+✅ **Society Infrastructure Management**
 
-✅ **Role-Based Access Control**
-- Different user roles (admin, residents, staff)
-- Customizable permissions for each role
-- Secure access to sensitive information
+- Modular setup for Wings, Floors, Units, and Parking Slots.
+- Comprehensive Member & Resident lifecycle management.
+- Visitor management with OTP verification.
 
-✅ **Modern UI with AdminLTE**
-- Clean, intuitive interface
-- Responsive design for all devices
-- DataTables integration for powerful data management
-
-✅ **API Support**
-- RESTful API endpoints for mobile applications
-- JSON-based responses for seamless integration
-- Token-based authentication
+---
 
 ## 🛠️ Tech Stack
 
-**Core Technologies:**
-- PHP 7.3+ | 8.0+
-- Laravel 8.x Framework
-- MySQL Database
-- AdminLTE 3.x Admin Template
+- **Backend:** Laravel 12.x (PHP 8.2+)
+- **Database:** PostgreSQL (Core ERP) / MySQL (Legacy)
+- **Frontend:** React + Tailwind CSS (V2) / AdminLTE (Legacy)
+- **Cache/Queue:** Redis
+- **Auth:** Sanctum / JWT
 
-**Frontend:**
-- Bootstrap 4.x
-- jQuery
-- Select2 for enhanced dropdowns
-- DataTables for advanced data management
-- Laravel Mix for asset compilation
+---
 
-**Backend:**
-- Eloquent ORM for database interactions
-- Laravel Sanctum for API authentication
-- Laravel CORS for cross-origin resource sharing
-- Laravel UI AdminLTE for admin panel integration
-
-**Development Tools:**
-- Composer for dependency management
-- Node.js for frontend build tools
-- PHPUnit for testing
-- Laravel Sail for Docker-based development
-
-## 📦 Installation
-
-### Prerequisites
-
-Before you begin, ensure you have the following installed on your system:
-- [Composer](https://getcomposer.org/) (for PHP dependencies)
-- [Node.js](https://nodejs.org/) (for frontend dependencies)
-- [MySQL](https://dev.mysql.com/downloads/) (or any MySQL-compatible database)
-- [PHP](https://www.php.net/downloads.php) (7.3 or higher)
-- [Git](https://git-scm.com/downloads) (for version control)
-
-### Quick Start
+## 📦 Localhost Installation
 
 1. **Clone the repository:**
+
    ```bash
-   git clone https://github.com/your-username/society-accounting.git
-   cd society-accounting
+   git clone https://github.com/aadhar41/society-services.git
+   cd society-services
    ```
 
-2. **Install PHP dependencies:**
+2. **Setup Dependencies:**
+
    ```bash
    composer install
-   ```
-
-3. **Install JavaScript dependencies:**
-   ```bash
    npm install
    ```
 
-4. **Copy the environment configuration:**
+3. **Configure Environment:**
+   - Copy `.env.example` to `.env`
+   - Set legacy `DB_CONNECTION=mysql` or ERP `DB_CONNECTION=pgsql` (recommended).
+   - Generate key: `php artisan key:generate`
+
+4. **Initialize Database:**
+
    ```bash
-   cp .env.example .env
+   php artisan migrate:fresh --seed --seeder=DefaultChartOfAccountsSeeder
    ```
 
-5. **Generate application key:**
-   ```bash
-   php artisan key:generate
-   ```
+5. **Start Dev Server:**
 
-6. **Configure your database:**
-   Edit the `.env` file with your database credentials:
-   ```env
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=your_database_name
-   DB_USERNAME=your_database_user
-   DB_PASSWORD=your_database_password
-   ```
-
-7. **Set up the database:**
-   ```bash
-   php artisan migrate --seed
-   ```
-
-8. **Compile assets:**
-   ```bash
-   npm run dev
-   ```
-
-9. **Start the development server:**
    ```bash
    php artisan serve
    ```
 
-10. **Access the application:**
-    Open your browser and navigate to `http://localhost:8000`
-
-### Alternative Installation Methods
-
-#### Using Docker (Recommended for Development)
-
-1. **Install Docker and Docker Compose:**
-   Follow the instructions for your operating system at [Docker's official site](https://docs.docker.com/get-docker/)
-
-2. **Start the containers:**
-   ```bash
-   docker-compose up -d
-   ```
-
-3. **Set up the database:**
-   ```bash
-   docker-compose exec app php artisan migrate --seed
-   ```
-
-4. **Compile assets:**
-   ```bash
-   docker-compose exec app npm run dev
-   ```
-
-5. **Access the application:**
-   Open your browser and navigate to `http://localhost`
-
-#### Using Laravel Sail
-
-1. **Install Laravel Sail:**
-   ```bash
-   composer require laravel/sail --dev
-   ```
-
-2. **Create the Sail configuration file:**
-   ```bash
-   ./vendor/bin/sail up
-   ```
-
-3. **Set up the database:**
-   ```bash
-   ./vendor/bin/sail artisan migrate --seed
-   ```
-
-4. **Compile assets:**
-   ```bash
-   ./vendor/bin/sail npm run dev
-   ```
-
-5. **Access the application:**
-   ```bash
-   ./vendor/bin/sail artisan serve
-   ```
+---
 
 ## 🎯 Usage
 
@@ -393,98 +275,34 @@ SANCTUM_STATEFUL_DOMAINS=localhost
 4. **Configure Payment Gateways:**
    Edit the payment-related configurations in the `config/services.php` file
 
-## 🤝 Contributing
-
-We welcome contributions from the community! Here's how you can contribute to the Society Accounting Management System:
-
-### How to Contribute
-
-1. **Fork the repository** on GitHub
-2. **Clone your fork** to your local machine
-3. **Create a new branch** for your feature or bugfix:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-4. **Make your changes** and test thoroughly
-5. **Commit your changes** with a descriptive message:
-   ```bash
-   git commit -m "Add: New feature description"
-   ```
-6. **Push to your fork**:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-7. **Open a Pull Request** against the main repository
-
-### Development Setup
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-username/society-accounting.git
-   cd society-accounting
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   composer install
-   npm install
-   ```
-
-3. **Set up the environment**:
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
-
-4. **Configure your database** in the `.env` file
-
-5. **Run migrations**:
-   ```bash
-   php artisan migrate --seed
-   ```
-
-6. **Compile assets**:
-   ```bash
-   npm run dev
-   ```
-
-7. **Start the development server**:
-   ```bash
-   php artisan serve
-   ```
-
-### Code Style Guidelines
-
-1. **Follow PSR-12** coding standards
-2. **Use consistent indentation** (4 spaces)
-3. **Write clear, concise comments** where necessary
-4. **Follow the existing code structure** and patterns
-5. **Use Laravel conventions** for naming and organization
-6. **Write tests** for new features and bug fixes
-
-### Pull Request Process
-
-1. **Ensure your code follows the style guidelines**
-2. **Write clear, descriptive commit messages**
-3. **Include tests** for new functionality
-4. **Document any new features** in the README
-5. **Update the CHANGELOG** if applicable
-6. **Submit a clear, concise pull request description**
-
 ## 📝 License
 
-This project is open-sourced under the **MIT License**.
+**PROPRIETARY SOFTWARE - ALL RIGHTS RESERVED**
 
-See the [LICENSE](LICENSE) file for more information.
+This software and its source code are the exclusive property of **Aadhar Gaur**. 
+
+- **NO UNAUTHORIZED USE:** No person or organization may use, copy, modify, or distribute this software without express written permission or a valid purchase agreement.
+- **COMMERCIAL LICENSING:** For purchasing a license or commercial inquiries, contact: **aadhar.gaur@example.com**.
+
+---
+
+## 🎨 Design System
+
+Our V2 architecture utilizes a premium design system with dynamic themes and sleek micro-animations for a high-end SaaS experience.
+
+---
+
+## 🤝 Contributing
+
+This is a proprietary repository. Contributions are only accepted from authorized team members. See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+---
 
 ## 👥 Authors & Contributors
 
-**Maintainers:**
-- [Your Name](https://github.com/your-username) - Initial work
+- **Aadhar Gaur** ([@aadhar41](https://github.com/aadhar41)) - Lead Architect & Developer
 
-**Contributors:**
-- [Contributor Name](https://github.com/contributor-username) - Feature X
-- [Contributor Name](https://github.com/contributor-username) - Bugfix Y
+---
 
 ## 🐛 Issues & Support
 
@@ -492,19 +310,19 @@ See the [LICENSE](LICENSE) file for more information.
 
 If you encounter any problems or have feature requests, please:
 
-1. **Check existing issues** to avoid duplicates
-2. **Create a new issue** with:
-   - Clear description of the problem
-   - Steps to reproduce
-   - Expected behavior
-   - Your environment details
-   - Any relevant error messages
+1.  **Check existing issues** to avoid duplicates
+2.  **Create a new issue** with:
+    - Clear description of the problem
+    - Steps to reproduce
+    - Expected behavior
+    - Your environment details
+    - Any relevant error messages
 
 ### Getting Help
 
-- **Community Support**: Join our [Discussion Forum](link-to-forum)
-- **Official Documentation**: [https://your-docs-url.com](https://your-docs-url.com)
-- **Email Support**: support@societyaccounting.com
+-   **Community Support**: Join our [Discussion Forum](link-to-forum)
+-   **Official Documentation**: [https://your-docs-url.com](https://your-docs-url.com)
+-   **Email Support**: support@societyaccounting.com
 
 ### FAQ
 
@@ -520,75 +338,24 @@ A: Yes, each society can be considered a separate tenant with its own data.
 **Q: Can I customize the UI?**
 A: Absolutely! The system uses AdminLTE and SCSS, making it easy to customize the appearance.
 
-## 🗺️ Roadmap
+## 🗺️ Roadmap (V2)
 
-### Planned Features
+-   [ ] Multi-Gateway Payment integration (Razorpay/Stripe)
+-   [ ] Mobile Resident App (Flutter/React Native)
+-   [ ] AI-driven Cashflow Forecasting
+-   [ ] IoT Integration for Smart Metering
 
-1. **Enhanced Reporting System**
-   - Custom report generation
-   - Export to PDF/Excel
-   - Scheduled reports
-
-2. **Mobile Application**
-   - iOS and Android apps
-   - Resident portal
-   - Admin dashboard
-
-3. **Advanced Analytics**
-   - Financial trend analysis
-   - Maintenance cost tracking
-   - Occupancy statistics
-
-4. **Integration with Payment Gateways**
-   - Razorpay
-   - PayPal
-   - Stripe
-
-5. **Enhanced Security Features**
-   - Two-factor authentication
-   - Audit logging
-   - Role-based access control fine-tuning
-
-### Known Issues
-
-1. **Issue #1**: [Description of the issue]
-   - Status: Open
-   - Priority: Medium
-
-2. **Issue #2**: [Description of the issue]
-   - Status: In Progress
-   - Priority: Low
-
-### Future Improvements
-
-1. **Improved Performance**
-   - Database optimization
-   - Caching strategies
-   - Asynchronous task processing
-
-2. **Enhanced User Experience**
-   - Mobile-responsive design
-   - Dark mode support
-   - Customizable dashboards
-
-3. **Additional Features**
-   - Event management system
-   - Document storage and sharing
-   - Vendor management
+---
 
 ## 🚀 Getting Started
 
 Ready to get started with the Society Accounting Management System? Follow these steps:
 
-1. **Install the system** as described above
-2. **Set up your database** with the provided migrations
-3. **Customize the system** to fit your specific needs
-4. **Start managing your society** efficiently!
+1.  **Install the system** as described above
+2.  **Set up your database** with the provided migrations
+3.  **Customize the system** to fit your specific needs
+4.  **Start managing your society** efficiently!
 
 Join our community of users and developers to share experiences, ask questions, and contribute to the project's growth. Together, we can make society management easier and more efficient for everyone!
 
----
-
-Thank you for choosing the Society Accounting Management System. We hope this tool helps you streamline your society management tasks and improve the overall experience for both administrators and residents.
-
----
+Thank you for choosing the **Society Accounting Management System**. We are committed to building the future of residential community management.

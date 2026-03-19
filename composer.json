@@ -1,9 +1,9 @@
 {
-    "name": "laravel/laravel",
+    "name": "aadhar41/society-services",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "description": "Society Accounting Management System - ERP for Housing Societies",
+    "keywords": ["society", "erp", "accounting", "laravel"],
+    "license": "proprietary",
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.2",
