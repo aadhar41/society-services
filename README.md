@@ -590,3 +590,5 @@ Join our community of users and developers to share experiences, ask questions, 
 ---
 
 Thank you for choosing the Society Accounting Management System. We hope this tool helps you streamline your society management tasks and improve the overall experience for both administrators and residents.
+
+---
