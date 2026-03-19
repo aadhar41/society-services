@@ -10,6 +10,8 @@ class Document extends Model
 {
     use HasUuid, HasSocietyScope;
 
+    protected $table = 'erp_documents';
+
     protected $fillable = [
         'society_id', 'title', 'category', 'file_path',
         'uploaded_by', 'meeting_date', 'is_public',

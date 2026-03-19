@@ -12,6 +12,8 @@ class Society extends Model
 {
     use HasFactory, HasUuid, Auditable, SoftDeletes;
 
+    protected $table = 'erp_societies';
+
     protected $fillable = [
         'name',
         'registration_no',

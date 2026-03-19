@@ -11,6 +11,8 @@ class Payment extends Model
 {
     use HasUuid, HasSocietyScope, Auditable;
 
+    protected $table = 'erp_payments';
+
     protected $fillable = [
         'society_id',
         'invoice_id',

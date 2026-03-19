@@ -20,6 +20,16 @@ class DefaultChartOfAccountsSeeder extends Seeder
 {
     public function run(int $societyId = 1): void
     {
+        // Ensure the society exists to satisfy foreign key constraints
+        \App\Domain\Society\Models\Society::firstOrCreate(
+            ['id' => $societyId],
+            [
+                'uuid' => \Illuminate\Support\Str::uuid(),
+                'name' => 'Default Society',
+                'status' => true
+            ]
+        );
+
         $groups = $this->getDefaultGroups();
 
         foreach ($groups as $groupData) {

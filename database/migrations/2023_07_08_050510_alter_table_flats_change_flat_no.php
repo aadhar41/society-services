@@ -14,7 +14,7 @@ class AlterTableFlatsChangeFlatNo extends Migration
     public function up()
     {
         Schema::table('flats', function (Blueprint $table) {
-            $table->string('flat_no')->nullable($value = true)->collation('utf8mb4_general_ci')->comment('Modified datatype from bigInteger to string.')->change();
+            $table->string('flat_no')->nullable($value = true)->comment('Modified datatype from bigInteger to string.')->change();
         });
     }
 
@@ -26,7 +26,7 @@ class AlterTableFlatsChangeFlatNo extends Migration
     public function down()
     {
         Schema::table('flats', function (Blueprint $table) {
-            $table->bigInteger('flat_no')->nullable($value = true)->collation('utf8mb4_general_ci');
+            $table->bigInteger('flat_no')->nullable($value = true);
         });
     }
 }

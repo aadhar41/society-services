@@ -42,7 +42,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('society_id')->constrained('erp_societies')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('role_id')->nullable()->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('role_id')->nullable();
             $table->timestamp('joined_at')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
@@ -180,7 +180,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->foreignId('society_id')->constrained('erp_societies')->cascadeOnDelete();
             $table->string('name');
-            $table->string('code', 20);
+            $table->string('code', 50);
             $table->foreignId('parent_id')->nullable()->constrained('account_groups')->nullOnDelete();
             $table->enum('nature', ['asset', 'liability', 'income', 'expense', 'equity']);
             $table->boolean('is_system')->default(false);
@@ -197,7 +197,7 @@ return new class extends Migration
             $table->foreignId('society_id')->constrained('erp_societies')->cascadeOnDelete();
             $table->foreignId('account_group_id')->constrained()->cascadeOnDelete();
             $table->string('name');
-            $table->string('code', 20);
+            $table->string('code', 50);
             $table->text('description')->nullable();
             $table->boolean('is_system')->default(false);
             $table->boolean('is_active')->default(true);
@@ -228,7 +228,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->foreignId('society_id')->constrained('erp_societies')->cascadeOnDelete();
             $table->foreignId('financial_year_id')->constrained()->cascadeOnDelete();
-            $table->string('entry_number', 30);
+            $table->string('entry_number', 50);
             $table->date('date');
             $table->text('narration')->nullable();
             $table->string('reference_type')->nullable();
@@ -284,7 +284,7 @@ return new class extends Migration
             $table->foreignId('society_id')->constrained('erp_societies')->cascadeOnDelete();
             $table->foreignId('unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('member_id')->constrained()->cascadeOnDelete();
-            $table->string('invoice_number', 30)->unique();
+            $table->string('invoice_number', 50)->unique();
             $table->foreignId('financial_year_id')->nullable()->constrained()->nullOnDelete();
             $table->date('billing_period_start');
             $table->date('billing_period_end');
@@ -332,7 +332,7 @@ return new class extends Migration
             $table->string('transaction_reference')->nullable();
             $table->string('cheque_no', 30)->nullable();
             $table->string('bank_name')->nullable();
-            $table->string('receipt_number', 30)->nullable();
+            $table->string('receipt_number', 50)->nullable();
             $table->foreignId('journal_entry_id')->nullable()->constrained()->nullOnDelete();
             $table->enum('status', ['pending', 'confirmed', 'failed', 'refunded'])->default('pending');
             $table->text('notes')->nullable();
