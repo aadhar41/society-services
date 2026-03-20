@@ -2,24 +2,24 @@
 
 ![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
 ![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
-![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![AdminLTE](https://img.shields.io/badge/AdminLTE-%234285F4.svg?style=for-the-badge&logo=adminlte&logoColor=white)
 
 ## 🖼️ Screenshots
 
 | Comprehensive ERP Dashboard | Society Management | Block Management |
 | :---: | :---: | :---: |
-| ![Dashboard](public/images/screens/updated_dashboard.png) | ![Society](public/images/screens/society_list.png) | ![Block](public/images/screens/block_list.png) |
+| ![Dashboard](public/images/screens/dashboard.png) | ![Society](public/images/screens/societies.png) | ![Block](public/images/screens/blocks.png) |
 | *Modern Dashboard UI* | *Society List View* | *Block Management View* |
 
 | Plot Management | Flat Management | Maintenance Records |
 | :---: | :---: | :---: |
-| ![Plot](public/images/screens/plot_list.png) | ![Flat](public/images/screens/flat_list.png) | ![Maintenance](public/images/screens/maintenance_list.png) |
+| ![Plot](public/images/screens/plots.png) | ![Flat](public/images/screens/flats.png) | ![Maintenance](public/images/screens/maintenance.png) |
 | *Plot Tracking* | *Unit & Resident View* | *Billing & Payments* |
 
 | Maintenance Reports (Grid) | Outstanding Report |
 | :---: | :---: |
-| ![Grid](public/images/screens/maintenance_report_grid.png) | ![Outstanding](public/images/screens/maintenance_outstanding_report.png) |
+| ![Grid](public/images/screens/report_grid.png) | ![Outstanding](public/images/screens/report_outstanding.png) |
 | *Financial Grid Overview* | *Defaulter Tracking* |
 
 ---
@@ -61,7 +61,7 @@
 ## 🛠️ Tech Stack
 
 - **Backend:** Laravel 12.x (PHP 8.2+)
-- **Database:** PostgreSQL (Core ERP) / MySQL (Legacy)
+- **Database:** PostgreSQL (Core ERP)
 - **Frontend:** React + Tailwind CSS (V2) / AdminLTE (Legacy)
 - **Cache/Queue:** Redis
 - **Auth:** Sanctum / JWT
@@ -86,13 +86,13 @@
 
 3. **Configure Environment:**
    - Copy `.env.example` to `.env`
-   - Set legacy `DB_CONNECTION=mysql` or ERP `DB_CONNECTION=pgsql` (recommended).
+   - Set legacy `DB_CONNECTION=pgsql` (recommended).
    - Generate key: `php artisan key:generate`
 
-4. **Initialize Database:**
+4. **Initialize Database & Demo Data:**
 
    ```bash
-   php artisan migrate:fresh --seed --seeder=DefaultChartOfAccountsSeeder
+   php artisan migrate:fresh --seed
    ```
 
 5. **Start Dev Server:**
@@ -204,9 +204,11 @@ $response = Http::withHeaders([
 ])->get('/api/societies');
 ```
 
+---
+
 ## 📁 Project Structure
 
-```
+```bash
 society-accounting/
 ├── app/                  # Application source code
 │   ├── Http/             # Controllers, Middleware, etc.
@@ -232,6 +234,8 @@ society-accounting/
 └── README.md            # This file
 ```
 
+---
+
 ## 🔧 Configuration
 
 ### Environment Variables
@@ -247,9 +251,9 @@ APP_DEBUG=true
 APP_URL=http://localhost
 
 # Database settings
-DB_CONNECTION=mysql
+DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
-DB_PORT=3306
+DB_PORT=5432
 DB_DATABASE=your_database
 DB_USERNAME=your_username
 DB_PASSWORD=your_password
@@ -284,14 +288,16 @@ SANCTUM_STATEFUL_DOMAINS=localhost
 4. **Configure Payment Gateways:**
    Edit the payment-related configurations in the `config/services.php` file
 
+---
+
 ## 📝 License
 
-**PROPRIETARY SOFTWARE - ALL RIGHTS RESERVED**
+### PROPRIETARY SOFTWARE - ALL RIGHTS RESERVED
 
-This software and its source code are the exclusive property of **Aadhar Gaur**. 
+This software and its source code are the exclusive property of **Aadhar Gaur**.
 
 - **NO UNAUTHORIZED USE:** No person or organization may use, copy, modify, or distribute this software without express written permission or a valid purchase agreement.
-- **COMMERCIAL LICENSING:** For purchasing a license or commercial inquiries, contact: **aadhar.gaur@example.com**.
+- **COMMERCIAL LICENSING:** For purchasing a license or commercial inquiries, contact: <aadhar.gaur@example.com>.
 
 ---
 
@@ -330,8 +336,8 @@ If you encounter any problems or have feature requests, please:
 ### Getting Help
 
 - **Community Support**: Join our [Discussion Forum](link-to-forum)
-- **Official Documentation**: [https://your-docs-url.com](https://your-docs-url.com)
-- **Email Support**: support@societyaccounting.com
+- **Official Documentation**: <https://your-docs-url.com>
+- **Email Support**: <support@societyaccounting.com>
 
 ### FAQ
 
@@ -339,13 +345,15 @@ If you encounter any problems or have feature requests, please:
 A: Visit the `/forgot-password` route and follow the instructions sent to your email.
 
 **Q: Can I use this system for commercial purposes?**
-A: Yes, this system is licensed under the MIT License which allows for both personal and commercial use.
+A: This is a proprietary system. Commercial use requires a valid license agreement from the author.
 
 **Q: Does this system support multi-tenancy?**
 A: Yes, each society can be considered a separate tenant with its own data.
 
 **Q: Can I customize the UI?**
 A: Absolutely! The system uses AdminLTE and SCSS, making it easy to customize the appearance.
+
+---
 
 ## 🗺️ Roadmap (V2)
 
