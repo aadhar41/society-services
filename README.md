@@ -9,17 +9,17 @@
 
 | Comprehensive ERP Dashboard | Society Management | Block Management |
 | :---: | :---: | :---: |
-| ![Dashboard](public/images/updated_dashboard.png) | ![Society](public/images/society_list.png) | ![Block](public/images/block_list.png) |
+| ![Dashboard](public/images/screens/updated_dashboard.png) | ![Society](public/images/screens/society_list.png) | ![Block](public/images/screens/block_list.png) |
 | *Modern Dashboard UI* | *Society List View* | *Block Management View* |
 
 | Plot Management | Flat Management | Maintenance Records |
 | :---: | :---: | :---: |
-| ![Plot](public/images/plot_list.png) | ![Flat](public/images/flat_list.png) | ![Maintenance](public/images/maintenance_list.png) |
+| ![Plot](public/images/screens/plot_list.png) | ![Flat](public/images/screens/flat_list.png) | ![Maintenance](public/images/screens/maintenance_list.png) |
 | *Plot Tracking* | *Unit & Resident View* | *Billing & Payments* |
 
 | Maintenance Reports (Grid) | Outstanding Report |
 | :---: | :---: |
-| ![Grid](public/images/maintenance_report_grid.png) | ![Outstanding](public/images/maintenance_outstanding_report.png) |
+| ![Grid](public/images/screens/maintenance_report_grid.png) | ![Outstanding](public/images/screens/maintenance_outstanding_report.png) |
 | *Financial Grid Overview* | *Defaulter Tracking* |
 
 ---
@@ -367,4 +367,4 @@ Ready to get started with the Society Accounting Management System? Follow these
 
 Join our community of users and developers to share experiences, ask questions, and contribute to the project's growth. Together, we can make society management easier and more efficient for everyone!
 
-Thank you for choosing the **Society Accounting Management System**. We are committed to building the future of residential community management.
+Thank you for choosing the **Society Accounting Management System**. We are committed to building the future of residential community management.
