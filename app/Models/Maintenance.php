@@ -28,8 +28,16 @@ class Maintenance extends Model
 
     public function setDateAttribute($value)
     {
-        $data = explode("/", $value);
-        $date = $data[2] . "-" . $data[1] . "-" . $data[0] . " 00:00:00";
-        $this->attributes['date'] = $date;
+        if ($value instanceof \DateTime || $value instanceof \Carbon\Carbon) {
+            $this->attributes['date'] = $value->format('Y-m-d 00:00:00');
+        } else {
+            $data = explode("/", $value);
+            if (count($data) == 3) {
+                $date = $data[2] . "-" . $data[1] . "-" . $data[0] . " 00:00:00";
+                $this->attributes['date'] = $date;
+            } else {
+                $this->attributes['date'] = \Carbon\Carbon::parse($value)->format('Y-m-d 00:00:00');
+            }
+        }
     }
 }

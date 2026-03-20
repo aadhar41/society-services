@@ -20,10 +20,10 @@ class SocietySeeder extends Seeder
      */
     public function run()
     {
-        DB::statement("SET foreign_key_checks=0");
+        DB::statement("SET session_replication_role = 'replica';");
         DB::table('societies')->truncate();
-        DB::statement("SET foreign_key_checks=1");
+        DB::statement("SET session_replication_role = 'origin';");
 
-        \App\Models\Society::factory(102)->create();
+        \App\Models\Society::factory(5)->create();
     }
 }

@@ -13,6 +13,10 @@ class ExpenseSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \Illuminate\Support\Facades\DB::statement("SET session_replication_role = 'replica';");
+        \App\Models\Expense::truncate();
+        \Illuminate\Support\Facades\DB::statement("SET session_replication_role = 'origin';");
+
+        \App\Models\Expense::factory(10)->create();
     }
 }

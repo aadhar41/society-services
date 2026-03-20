@@ -20,35 +20,15 @@ class MaintenanceSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement("SET foreign_key_checks=0");
-        DB::table('societies')->truncate();
-        DB::table('blocks')->truncate();
-        DB::table('plots')->truncate();
-        DB::table('flats')->truncate();
+        DB::statement("SET session_replication_role = 'replica';");
         DB::table('maintenances')->truncate();
-        DB::statement("SET foreign_key_checks=1");
+        DB::statement("SET session_replication_role = 'origin';");
 
-        \App\Models\Society::factory(10)->create()
-            ->each(function ($u) {
-                $u->blocks()
-                    ->saveMany(
-                        \App\Models\Block::factory(5)->make()
-                    )->each(function ($p) {
-                        $p->plots()
-                            ->saveMany(
-                                \App\Models\Plot::factory(5)->make()
-                            )->each(function ($p) {
-                                $p->flats()
-                                    ->saveMany(
-                                        \App\Models\Flat::factory(5)->make()
-                                    )->each(function ($p) {
-                                        $p->maintenances()
-                                            ->saveMany(
-                                                \App\Models\Maintenance::factory(2)->make()
-                                            );
-                                    });
-                            });
-                    });
-            });
+        \App\Models\Flat::all()->each(function ($f) {
+            $f->maintenances()
+                ->saveMany(
+                    \App\Models\Maintenance::factory(3)->make()
+                );
+        });
     }
 }
