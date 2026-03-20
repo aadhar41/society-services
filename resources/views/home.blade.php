@@ -13,14 +13,14 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3>{{ $totalSocieties }}</h3>
 
-                        <p>New Orders</p>
+                        <p>Total Societies</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-chart-pie"></i>
+                        <i class="fas fa-building"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('admin.society.list') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -28,14 +28,14 @@
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>53<sup style="font-size: 20px">%</sup></h3>
+                        <h3>{{ $totalBlocks }}</h3>
 
-                        <p>Bounce Rate</p>
+                        <p>Total Blocks</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-tree"></i>
+                        <i class="fas fa-th-large"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('admin.block.list') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -43,14 +43,14 @@
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3>44</h3>
+                        <h3>{{ $totalFlats }}</h3>
 
-                        <p>User Registrations</p>
+                        <p>Total Flats</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-home"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('admin.flat.list') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -58,19 +58,63 @@
                 <!-- small box -->
                 <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3>65</h3>
+                        <h3>{{ $totalMaintenance }}</h3>
 
-                        <p>Unique Visitors</p>
+                        <p>Maintenance Records</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-chart-pie"></i>
+                        <i class="fas fa-money-bill-wave"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('admin.maintenance.list') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
         </div>
         <!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-outline card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-bolt mr-1"></i> Quick Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <a href="{{ route('admin.society.create') }}" class="btn btn-app bg-info">
+                                    <i class="fas fa-building"></i> Add Society
+                                </a>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <a href="{{ route('admin.block.create') }}" class="btn btn-app bg-success">
+                                    <i class="fas fa-th-large"></i> Add Block
+                                </a>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <a href="{{ route('admin.plot.create') }}" class="btn btn-app bg-warning">
+                                    <i class="fas fa-map"></i> Add Plot
+                                </a>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <a href="{{ route('admin.flat.create') }}" class="btn btn-app bg-purple">
+                                    <i class="fas fa-home"></i> Add Flat
+                                </a>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <a href="{{ route('admin.maintenance.create') }}" class="btn btn-app bg-danger">
+                                    <i class="fas fa-money-bill-wave"></i> Record Payment
+                                </a>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <a href="{{ route('admin.maintenance-report.grid') }}" class="btn btn-app bg-secondary">
+                                    <i class="fas fa-file-invoice-dollar"></i> Reports
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <div class="container-fluid">
