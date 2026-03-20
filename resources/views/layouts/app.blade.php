@@ -9,7 +9,7 @@
 
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script> -->
     <!-- jQuery -->
-    <script src="{{ URL::asset('assets/jquery/jquery.min.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <script type="text/javascript" src="{{ URL::asset('js/common.js') }}"></script>
