@@ -7,10 +7,20 @@
 
 ## 🖼️ Screenshots
 
-| Comprehensive ERP Dashboard | Accounting & Ledger | Society Management |
+| Comprehensive ERP Dashboard | Society Management | Block Management |
 | :---: | :---: | :---: |
-| ![Logo Big](public/images/ag-logo-big.png) | ![Logo Small](public/images/ag-logo-small.png) | ![Logo JPG](public/images/ag-logo.jpg) |
-| *Modern Dashboard UI* | *Chart of Accounts* | *Member Profiles* |
+| ![Dashboard](public/images/updated_dashboard.png) | ![Society](public/images/society_list.png) | ![Block](public/images/block_list.png) |
+| *Modern Dashboard UI* | *Society List View* | *Block Management View* |
+
+| Plot Management | Flat Management | Maintenance Records |
+| :---: | :---: | :---: |
+| ![Plot](public/images/plot_list.png) | ![Flat](public/images/flat_list.png) | ![Maintenance](public/images/maintenance_list.png) |
+| *Plot Tracking* | *Unit & Resident View* | *Billing & Payments* |
+
+| Maintenance Reports (Grid) | Outstanding Report |
+| :---: | :---: |
+| ![Grid](public/images/maintenance_report_grid.png) | ![Outstanding](public/images/maintenance_outstanding_report.png) |
+| *Financial Grid Overview* | *Defaulter Tracking* |
 
 ---
 
@@ -179,8 +189,7 @@ $response = Http::post('/api/societies/{society_id}/blocks/{block_id}/flats/{fla
 3. Create new views in the `resources/views` directory
 4. Add new migrations using `php artisan make:migration`
 
-```php
-// Example of creating a new controller
+```bash
 php artisan make:controller ComplaintController --api
 ```
 
@@ -310,8 +319,8 @@ This is a proprietary repository. Contributions are only accepted from authorize
 
 If you encounter any problems or have feature requests, please:
 
-1.  **Check existing issues** to avoid duplicates
-2.  **Create a new issue** with:
+1. **Check existing issues** to avoid duplicates
+2. **Create a new issue** with:
     - Clear description of the problem
     - Steps to reproduce
     - Expected behavior
@@ -320,9 +329,9 @@ If you encounter any problems or have feature requests, please:
 
 ### Getting Help
 
--   **Community Support**: Join our [Discussion Forum](link-to-forum)
--   **Official Documentation**: [https://your-docs-url.com](https://your-docs-url.com)
--   **Email Support**: support@societyaccounting.com
+- **Community Support**: Join our [Discussion Forum](link-to-forum)
+- **Official Documentation**: [https://your-docs-url.com](https://your-docs-url.com)
+- **Email Support**: support@societyaccounting.com
 
 ### FAQ
 
@@ -340,10 +349,10 @@ A: Absolutely! The system uses AdminLTE and SCSS, making it easy to customize th
 
 ## 🗺️ Roadmap (V2)
 
--   [ ] Multi-Gateway Payment integration (Razorpay/Stripe)
--   [ ] Mobile Resident App (Flutter/React Native)
--   [ ] AI-driven Cashflow Forecasting
--   [ ] IoT Integration for Smart Metering
+- [ ] Multi-Gateway Payment integration (Razorpay/Stripe)
+- [ ] Mobile Resident App (Flutter/React Native)
+- [ ] AI-driven Cashflow Forecasting
+- [ ] IoT Integration for Smart Metering
 
 ---
 
@@ -351,11 +360,11 @@ A: Absolutely! The system uses AdminLTE and SCSS, making it easy to customize th
 
 Ready to get started with the Society Accounting Management System? Follow these steps:
 
-1.  **Install the system** as described above
-2.  **Set up your database** with the provided migrations
-3.  **Customize the system** to fit your specific needs
-4.  **Start managing your society** efficiently!
+1. **Install the system** as described above
+2. **Set up your database** with the provided migrations
+3. **Customize the system** to fit your specific needs
+4. **Start managing your society** efficiently!
 
 Join our community of users and developers to share experiences, ask questions, and contribute to the project's growth. Together, we can make society management easier and more efficient for everyone!
 
-Thank you for choosing the **Society Accounting Management System**. We are committed to building the future of residential community management.
+Thank you for choosing the **Society Accounting Management System**. We are committed to building the future of residential community management.
