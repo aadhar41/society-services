@@ -32,7 +32,7 @@ class SetCurrentSociety
 
             if ($user && !$user->is_superadmin) {
                 $belongsToSociety = $user->societies()
-                    ->where('societies.id', $societyId)
+                    ->where($user->societies()->getRelated()->getTable() . '.id', $societyId)
                     ->exists();
 
                 if (!$belongsToSociety) {

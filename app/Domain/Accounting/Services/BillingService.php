@@ -240,7 +240,7 @@ class BillingService
             'account_id' => $receivableAccount->id,
             'debit' => (float) $invoice->net_amount,
             'credit' => 0,
-            'narration' => "Invoice {$invoice->invoice_number} - {$invoice->unit->display_name ?? 'Unit'}",
+            'narration' => "Invoice " . $invoice->invoice_number . " - " . ($invoice->unit->display_name ?? 'Unit'),
         ];
 
         // Credit: Each charge head's corresponding income account

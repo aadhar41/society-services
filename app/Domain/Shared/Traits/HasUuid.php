@@ -21,13 +21,13 @@ trait HasUuid
         });
     }
 
-    /**
-     * Get the route key name for implicit route binding.
-     */
-    public function getRouteKeyName(): string
-    {
-        return 'uuid';
-    }
+//    /**
+//     * Get the route key name for implicit route binding.
+//     */
+//    public function getRouteKeyName(): string
+//    {
+//        return 'uuid';
+//    }
 
     /**
      * Scope to find by UUID.
