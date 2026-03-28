@@ -4,7 +4,7 @@ namespace App\Domain\Auth\Controllers;
 
 use App\Models\Module;
 use App\Models\SystemRole;
-use App\Models\Society;
+use App\Domain\Society\Models\Society;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
