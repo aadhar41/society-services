@@ -17,6 +17,8 @@ class Country extends Model
 
     protected $table = 'countries';
 
+    public $timestamps = false;
+
     protected $fillable = ['countryCode'];
 
     protected $guarded = [];
