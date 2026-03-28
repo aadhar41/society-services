@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
             'api/v2/auth/*',
+            'api/v2/admin/login',
         ]);
         $middleware->append(\App\Http\Middleware\AutoLogout::class);
         $middleware->statefulApi();

@@ -18,10 +18,40 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v2/auth')->group(function () {
     Route::post('/register', [\App\Domain\Auth\Controllers\AuthController::class, 'register']);
     Route::post('/login', [\App\Domain\Auth\Controllers\AuthController::class, 'login']);
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/me', [\App\Domain\Auth\Controllers\AuthController::class, 'me']);
+        Route::get('/modules', [\App\Domain\Auth\Controllers\ModuleAccessController::class, 'index']);
+        Route::post('/logout', [\App\Domain\Auth\Controllers\AuthController::class, 'logout']);
+    });
     Route::post('/login/otp', [\App\Domain\Auth\Controllers\AuthController::class, 'sendOtp']);
     Route::post('/login/otp/verify', [\App\Domain\Auth\Controllers\AuthController::class, 'verifyOtp']);
     Route::post('/password/forgot', [\App\Domain\Auth\Controllers\AuthController::class, 'forgotPassword']);
     Route::post('/password/reset', [\App\Domain\Auth\Controllers\AuthController::class, 'resetPassword']);
+});
+
+// ═══ SUPER ADMIN ROUTES ══════════════════════════════════════════════
+Route::prefix('v2/admin')->group(function () {
+    Route::post('/login', [\App\Domain\Auth\Controllers\AuthController::class, 'adminLogin']);
+    
+    // Master Data
+    Route::get('/master/countries', [\App\Domain\Shared\Controllers\MasterDataController::class, 'countries']);
+    Route::get('/master/states', [\App\Domain\Shared\Controllers\MasterDataController::class, 'states']);
+    Route::get('/master/states/{state}/cities', [\App\Domain\Shared\Controllers\MasterDataController::class, 'cities']);
+    
+    Route::middleware(['auth:sanctum', 'superadmin'])->group(function () {
+        // Module Management
+        Route::get('modules', [\App\Domain\Auth\Controllers\AdminModuleController::class, 'index']);
+        Route::post('modules/{module}/toggle-global', [\App\Domain\Auth\Controllers\AdminModuleController::class, 'toggleGlobal']);
+        Route::post('modules/toggle-role', [\App\Domain\Auth\Controllers\AdminModuleController::class, 'toggleRole']);
+        Route::get('societies/{society}/modules', [\App\Domain\Auth\Controllers\AdminModuleController::class, 'societyModules']);
+        Route::post('societies/toggle-module', [\App\Domain\Auth\Controllers\AdminModuleController::class, 'toggleSociety']);
+
+        Route::apiResource('users', \App\Domain\Auth\Controllers\AdminUserController::class);
+        Route::post('users/{user}/assign-society', [\App\Domain\Auth\Controllers\AdminUserController::class, 'assignToSociety']);
+        Route::delete('users/{user}/unassign-society', [\App\Domain\Auth\Controllers\AdminUserController::class, 'unassignFromSociety']);
+        Route::post('users/{user}/reset-password', [\App\Domain\Auth\Controllers\AdminUserController::class, 'resetPassword']);
+        Route::apiResource('all-societies', \App\Domain\Society\Controllers\AdminSocietyController::class);
+    });
 });
 
 // ═══ AUTHENTICATED ROUTES ════════════════════════════════════════════

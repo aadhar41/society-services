@@ -67,6 +67,40 @@ class AuthController extends Controller
     }
 
     /**
+     * POST /api/v2/admin/login
+     */
+    public function adminLogin(Request $request): JsonResponse
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'message' => 'Invalid credentials.',
+            ], 401);
+        }
+
+        $user = Auth::user();
+
+        if (!$user->is_superadmin) {
+            Auth::logout();
+            return response()->json([
+                'message' => 'Unauthorized. Not a Super Admin.',
+            ], 403);
+        }
+
+        $token = $user->createToken('admin-token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Admin login successful.',
+            'user' => $user,
+            'token' => $token,
+        ]);
+    }
+
+    /**
      * POST /api/v2/auth/login/otp
      */
     public function sendOtp(Request $request): JsonResponse

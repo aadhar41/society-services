@@ -137,4 +137,11 @@ class Society extends Model
     {
         return $this->hasMany(\App\Domain\Document\Models\Document::class);
     }
+
+    public function modules()
+    {
+        return $this->belongsToMany(\App\Models\Module::class, 'erp_society_modules', 'society_id', 'module_id')
+            ->withPivot('is_enabled')
+            ->withTimestamps();
+    }
 }

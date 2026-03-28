@@ -33,6 +33,7 @@ class DomainServiceProvider extends ServiceProvider
         // Register middleware aliases
         $router = $this->app['router'];
         $router->aliasMiddleware('set.society', \App\Domain\Shared\Middleware\SetCurrentSociety::class);
+        $router->aliasMiddleware('superadmin', \App\Http\Middleware\EnsureIsSuperAdmin::class);
         $router->aliasMiddleware('accounting.integrity', \App\Domain\Shared\Middleware\EnsureAccountingIntegrity::class);
     }
 }
