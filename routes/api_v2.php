@@ -33,7 +33,7 @@ Route::prefix('v2')->middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [\App\Domain\Auth\Controllers\AuthController::class, 'me']);
 
     // ─── Societies (no society scope needed) ───────────────────────
-    Route::apiResource('societies', \App\Domain\Society\Controllers\SocietyController::class);
+    Route::apiResource('societies', \App\Domain\Society\Controllers\SocietyController::class)->names('v2.societies');
 
     // ─── Society-scoped routes ─────────────────────────────────────
     Route::middleware('set.society')->group(function () {

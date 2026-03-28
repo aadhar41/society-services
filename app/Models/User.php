@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'avatar',
         'is_superadmin',
+        'license_id',
     ];
 
     /**
@@ -55,5 +56,29 @@ class User extends Authenticatable
         return $this->belongsToMany(\App\Domain\Society\Models\Society::class, 'society_user')
             ->withPivot('role_id', 'joined_at', 'status')
             ->withTimestamps();
+    }
+
+    /**
+     * License associated with this user.
+     */
+    public function license()
+    {
+        return $this->belongsTo(License::class);
+    }
+
+    /**
+     * Check if user can create more societies based on license.
+     */
+    public function canCreateMoreSocieties(): bool
+    {
+        if ($this->is_superadmin) {
+            return true;
+        }
+
+        if (!$this->license) {
+            return false;
+        }
+
+        return $this->societies()->count() < $this->license->max_societies;
     }
 }

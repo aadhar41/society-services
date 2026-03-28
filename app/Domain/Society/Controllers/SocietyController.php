@@ -12,9 +12,16 @@ class SocietyController extends Controller
     /**
      * Display a listing of societies.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $societies = Society::all();
+        $user = $request->user();
+        
+        if ($user->is_superadmin) {
+            $societies = Society::all();
+        } else {
+            $societies = $user->societies;
+        }
+
         return response()->json([
             'success' => true,
             'data' => $societies
@@ -39,6 +46,15 @@ class SocietyController extends Controller
             'email' => 'nullable|email|max:255',
             'website' => 'nullable|url|max:255',
         ]);
+
+        $user = $request->user();
+
+        if (!$user->canCreateMoreSocieties()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Society limit exceeded for your current license.',
+            ], 403);
+        }
 
         $society = Society::create($validated);
 
