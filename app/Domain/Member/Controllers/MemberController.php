@@ -4,6 +4,7 @@ namespace App\Domain\Member\Controllers;
 
 use App\Domain\Member\Models\Member;
 use App\Domain\Society\Models\Unit;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -11,18 +12,27 @@ use Illuminate\Support\Facades\Storage;
 
 class MemberController extends Controller
 {
+    use HasPagination;
+
+    /**
+     * Display a paginated, searchable listing of members.
+     * Query params: search, unit_id, member_type, per_page
+     */
     public function index(Request $request): JsonResponse
     {
         $members = Member::with(['unit.wing', 'user'])
+            ->when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('name', 'ilike', "%{$s}%")
+                  ->orWhere('phone', 'ilike', "%{$s}%")
+                  ->orWhere('email', 'ilike', "%{$s}%");
+            }))
             ->when($request->unit_id, fn($q, $id) => $q->where('unit_id', $id))
             ->when($request->member_type, fn($q, $t) => $q->where('member_type', $t))
             ->active()
-            ->get();
+            ->orderBy('name')
+            ->paginate($this->perPage());
 
-        return response()->json([
-            'success' => true,
-            'data' => $members
-        ]);
+        return $this->paginatedResponse($members);
     }
 
     public function store(Request $request): JsonResponse

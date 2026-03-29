@@ -3,18 +3,31 @@
 namespace App\Domain\Vendor\Controllers;
 
 use App\Domain\Vendor\Models\Vendor;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class VendorController extends Controller
 {
-    public function index(): JsonResponse
+    use HasPagination;
+
+    /**
+     * Display a paginated, searchable listing of vendors.
+     * Query params: search, status, per_page
+     */
+    public function index(Request $request): JsonResponse
     {
-        return response()->json([
-            'success' => true,
-            'data' => Vendor::all()
-        ]);
+        $vendors = Vendor::when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('name', 'ilike', "%{$s}%")
+                  ->orWhere('company', 'ilike', "%{$s}%")
+                  ->orWhere('phone', 'ilike', "%{$s}%");
+            }))
+            ->when($request->has('status'), fn($q) => $q->where('status', $request->boolean('status')))
+            ->orderBy('name')
+            ->paginate($this->perPage());
+
+        return $this->paginatedResponse($vendors);
     }
 
     public function store(Request $request): JsonResponse

@@ -3,6 +3,7 @@
 namespace App\Domain\Visitor\Controllers;
 
 use App\Domain\Visitor\Models\Visitor;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -10,21 +11,25 @@ use Illuminate\Support\Facades\Storage;
 
 class VisitorController extends Controller
 {
+    use HasPagination;
+
     /**
      * GET /api/v2/visitors
+     * Query params: search, status, date, per_page
      */
     public function index(Request $request): JsonResponse
     {
         $visitors = Visitor::with(['unit.wing', 'preApprovedBy'])
+            ->when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('name', 'ilike', "%{$s}%")
+                  ->orWhere('phone', 'ilike', "%{$s}%");
+            }))
             ->when($request->status, fn($q, $s) => $q->where('status', $s))
             ->when($request->date, fn($q, $d) => $q->whereDate('check_in', $d))
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate($this->perPage());
 
-        return response()->json([
-            'success' => true,
-            'data' => $visitors
-        ]);
+        return $this->paginatedResponse($visitors);
     }
 
     /**

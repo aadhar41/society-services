@@ -4,6 +4,7 @@ namespace App\Domain\Complaint\Controllers;
 
 use App\Domain\Complaint\Models\Complaint;
 use App\Domain\Member\Models\Member;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -11,19 +12,26 @@ use Illuminate\Support\Facades\Auth;
 
 class ComplaintController extends Controller
 {
+    use HasPagination;
+
+    /**
+     * Display a paginated, searchable listing of complaints.
+     * Query params: search, status, priority, category_id, per_page
+     */
     public function index(Request $request): JsonResponse
     {
         $complaints = Complaint::with(['category', 'unit.wing', 'member', 'assignee'])
+            ->when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('title', 'ilike', "%{$s}%")
+                  ->orWhere('ticket_number', 'ilike', "%{$s}%");
+            }))
             ->when($request->status, fn($q, $s) => $q->where('status', $s))
             ->when($request->priority, fn($q, $p) => $q->where('priority', $p))
             ->when($request->category_id, fn($q, $id) => $q->where('category_id', $id))
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate($this->perPage());
 
-        return response()->json([
-            'success' => true,
-            'data' => $complaints
-        ]);
+        return $this->paginatedResponse($complaints);
     }
 
     public function store(Request $request): JsonResponse

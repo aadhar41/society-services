@@ -3,21 +3,31 @@
 namespace App\Domain\Staff\Controllers;
 
 use App\Domain\Staff\Models\Staff;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class StaffController extends Controller
 {
+    use HasPagination;
+
+    /**
+     * Display a paginated, searchable listing of staff.
+     * Query params: search, category, status, per_page
+     */
     public function index(Request $request): JsonResponse
     {
-        $staff = Staff::when($request->category, fn($q, $c) => $q->where('category', $c))
-            ->get();
+        $staff = Staff::when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('name', 'ilike', "%{$s}%")
+                  ->orWhere('phone', 'ilike', "%{$s}%");
+            }))
+            ->when($request->category, fn($q, $c) => $q->where('category', $c))
+            ->when($request->has('status'), fn($q) => $q->where('status', $request->boolean('status')))
+            ->orderBy('name')
+            ->paginate($this->perPage());
 
-        return response()->json([
-            'success' => true,
-            'data' => $staff
-        ]);
+        return $this->paginatedResponse($staff);
     }
 
     public function store(Request $request): JsonResponse

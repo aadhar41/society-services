@@ -3,26 +3,30 @@
 namespace App\Domain\Society\Controllers;
 
 use App\Domain\Society\Models\Unit;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class UnitController extends Controller
 {
+    use HasPagination;
+
     /**
-     * Display a listing of units.
+     * Display a paginated, searchable listing of units.
+     * Query params: search, wing_id, unit_type, status, per_page
      */
     public function index(Request $request): JsonResponse
     {
         $units = Unit::with(['wing', 'floor', 'currentOwner', 'currentTenant'])
+            ->when($request->search, fn($q, $s) => $q->where('unit_number', 'ilike', "%{$s}%"))
             ->when($request->wing_id, fn($q, $id) => $q->where('wing_id', $id))
             ->when($request->unit_type, fn($q, $t) => $q->where('unit_type', $t))
-            ->get();
+            ->when($request->has('status'), fn($q) => $q->where('status', $request->boolean('status')))
+            ->orderBy('unit_number')
+            ->paginate($this->perPage());
 
-        return response()->json([
-            'success' => true,
-            'data' => $units
-        ]);
+        return $this->paginatedResponse($units);
     }
 
     /**
