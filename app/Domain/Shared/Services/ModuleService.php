@@ -10,7 +10,7 @@ class ModuleService
     /**
      * Get all enabled modules for a specific society and role.
      */
-    public function getEnabledModules(int $societyId, int $roleId): array
+    public function getEnabledModules(int $societyId, int|null $roleId = null): array
     {
         // 1. Get all globally active modules
         $allModules = Module::where('is_active', true)->get();
@@ -22,11 +22,14 @@ class ModuleService
             ->pluck('is_enabled', 'module_id')
             ->toArray();
 
-        // 3. Get role defaults
-        $roleDefaults = DB::table('erp_role_modules')
-            ->where('role_id', $roleId)
-            ->pluck('is_enabled', 'module_id')
-            ->toArray();
+        // 3. Get role defaults (skip if no role assigned)
+        $roleDefaults = [];
+        if ($roleId !== null) {
+            $roleDefaults = DB::table('erp_role_modules')
+                ->where('role_id', $roleId)
+                ->pluck('is_enabled', 'module_id')
+                ->toArray();
+        }
 
         foreach ($allModules as $module) {
             $isEnabled = true;

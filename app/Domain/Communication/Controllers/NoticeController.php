@@ -13,7 +13,7 @@ class NoticeController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => Notice::active()->orderByDesc('created_at')->get()
+            'data' => Notice::with('category')->active()->orderByDesc('created_at')->get()
         ]);
     }
 
@@ -21,13 +21,15 @@ class NoticeController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'expiry_date' => 'nullable|date',
-            'is_urgent' => 'nullable|boolean',
+            'body' => 'required|string',
+            'category_id' => 'nullable|exists:complaint_categories,id',
+            'expires_at' => 'nullable|date',
+            'priority' => 'nullable|in:low,normal,high',
         ]);
 
         $notice = Notice::create(array_merge($validated, [
-            'author_id' => \Illuminate\Support\Facades\Auth::id(),
+            'created_by' => \Illuminate\Support\Facades\Auth::id(),
+            'published_at' => now(),
         ]));
 
         return response()->json([
@@ -48,8 +50,10 @@ class NoticeController extends Controller
     {
         $validated = $request->validate([
             'title' => 'sometimes|required|string|max:255',
-            'content' => 'sometimes|required|string',
-            'is_active' => 'nullable|boolean',
+            'body' => 'sometimes|required|string',
+            'category_id' => 'nullable|exists:complaint_categories,id',
+            'priority' => 'sometimes|required|in:low,normal,high',
+            'expires_at' => 'nullable|date',
         ]);
 
         $notice->update($validated);

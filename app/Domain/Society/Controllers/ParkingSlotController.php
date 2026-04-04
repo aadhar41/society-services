@@ -3,23 +3,30 @@
 namespace App\Domain\Society\Controllers;
 
 use App\Domain\Society\Models\ParkingSlot;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class ParkingSlotController extends Controller
 {
+    use HasPagination;
+
+    /**
+     * Display a paginated, searchable listing of parking slots.
+     * Query params: search, unit_id, slot_type, status, per_page
+     */
     public function index(Request $request): JsonResponse
     {
         $slots = ParkingSlot::with(['unit.wing'])
+            ->when($request->search, fn($q, $s) => $q->where('slot_number', 'ilike', "%{$s}%"))
             ->when($request->unit_id, fn($q, $id) => $q->where('unit_id', $id))
             ->when($request->slot_type, fn($q, $t) => $q->where('slot_type', $t))
-            ->get();
+            ->when($request->has('status'), fn($q) => $q->where('status', $request->boolean('status')))
+            ->orderBy('slot_number')
+            ->paginate($this->perPage());
 
-        return response()->json([
-            'success' => true,
-            'data' => $slots
-        ]);
+        return $this->paginatedResponse($slots);
     }
 
     public function store(Request $request): JsonResponse

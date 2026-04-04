@@ -12,10 +12,11 @@ class Vendor extends Model
 
     protected $fillable = [
         'society_id', 'name', 'company', 'phone', 'email', 'gst_no',
-        'pan_no', 'address', 'service_type', 'status',
+        'pan_no', 'address', 'service_type', 'category_id', 'status',
     ];
 
     protected $casts = ['status' => 'boolean'];
 
+    public function category()  { return $this->belongsTo(\App\Domain\Complaint\Models\ComplaintCategory::class, 'category_id'); }
     public function contracts() { return $this->hasMany(VendorContract::class); }
 }

@@ -3,18 +3,33 @@
 namespace App\Domain\Vendor\Controllers;
 
 use App\Domain\Vendor\Models\Vendor;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class VendorController extends Controller
 {
-    public function index(): JsonResponse
+    use HasPagination;
+
+    /**
+     * Display a paginated, searchable listing of vendors.
+     * Query params: search, status, per_page
+     */
+    public function index(Request $request): JsonResponse
     {
-        return response()->json([
-            'success' => true,
-            'data' => Vendor::all()
-        ]);
+        $vendors = Vendor::with('category')
+            ->when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('name', 'ilike', "%{$s}%")
+                  ->orWhere('company', 'ilike', "%{$s}%")
+                  ->orWhere('phone', 'ilike', "%{$s}%");
+            }))
+            ->when($request->category_id, fn($q, $id) => $q->where('category_id', $id))
+            ->when($request->has('status'), fn($q) => $q->where('status', $request->boolean('status')))
+            ->orderBy('name')
+            ->paginate($this->perPage());
+
+        return $this->paginatedResponse($vendors);
     }
 
     public function store(Request $request): JsonResponse
@@ -24,6 +39,7 @@ class VendorController extends Controller
             'contact_person' => 'required|string|max:100',
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:100',
+            'category_id' => 'nullable|exists:complaint_categories,id',
             'category' => 'nullable|string|max:50',
             'address' => 'nullable|string',
         ]);
@@ -48,7 +64,12 @@ class VendorController extends Controller
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:100',
+            'contact_person' => 'sometimes|required|string|max:100',
             'phone' => 'sometimes|required|string|max:20',
+            'email' => 'nullable|email|max:100',
+            'category_id' => 'nullable|exists:complaint_categories,id',
+            'category' => 'nullable|string|max:50',
+            'address' => 'nullable|string',
             'status' => 'nullable|boolean',
         ]);
 

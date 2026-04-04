@@ -12,8 +12,8 @@ class Visitor extends Model
 
     protected $fillable = [
         'society_id', 'unit_id', 'name', 'phone', 'vehicle_no', 'purpose',
-        'visitor_type', 'photo', 'otp', 'otp_expires_at', 'approved_by',
-        'check_in_at', 'check_out_at', 'status',
+        'visitor_type', 'photo', 'otp', 'pass_code', 'otp_expires_at', 
+        'approved_by', 'pre_approved_by', 'check_in_at', 'check_out_at', 'status',
     ];
 
     protected $casts = [
@@ -24,8 +24,9 @@ class Visitor extends Model
 
     protected $hidden = ['otp'];
 
-    public function unit()       { return $this->belongsTo(\App\Domain\Society\Models\Unit::class); }
-    public function approvedBy() { return $this->belongsTo(\App\Models\User::class, 'approved_by'); }
+    public function unit()          { return $this->belongsTo(\App\Domain\Society\Models\Unit::class); }
+    public function approvedBy()    { return $this->belongsTo(\App\Models\User::class, 'approved_by'); }
+    public function preApprovedBy() { return $this->belongsTo(\App\Models\User::class, 'pre_approved_by'); }
 
     public function scopeToday($query)     { return $query->whereDate('check_in_at', today()); }
     public function scopeCheckedIn($query) { return $query->whereNotNull('check_in_at')->whereNull('check_out_at'); }

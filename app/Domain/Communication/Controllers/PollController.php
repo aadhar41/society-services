@@ -21,12 +21,16 @@ class PollController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'question' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'options' => 'required|array|min:2',
-            'expires_at' => 'nullable|date',
+            'end_date' => 'required|date',
         ]);
 
-        $poll = Poll::create($validated);
+        $poll = Poll::create(array_merge($validated, [
+            'created_by' => \Illuminate\Support\Facades\Auth::id(),
+            'start_date' => now(),
+        ]));
 
         return response()->json([
             'success' => true,

@@ -3,22 +3,31 @@
 namespace App\Domain\Society\Controllers;
 
 use App\Domain\Society\Models\Wing;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class WingController extends Controller
 {
+    use HasPagination;
+
     /**
-     * Display a listing of wings.
+     * Display a paginated, searchable listing of wings.
+     * Query params: search, status, per_page
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $wings = Wing::withCount('units')->get();
-        return response()->json([
-            'success' => true,
-            'data' => $wings
-        ]);
+        $wings = Wing::withCount('units')
+            ->when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('name', 'ilike', "%{$s}%")
+                  ->orWhere('code', 'ilike', "%{$s}%");
+            }))
+            ->when($request->has('status'), fn($q) => $q->where('status', $request->boolean('status')))
+            ->orderBy('name')
+            ->paginate($this->perPage());
+
+        return $this->paginatedResponse($wings);
     }
 
     /**
@@ -28,7 +37,7 @@ class WingController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:100|unique:wings,name',
-            'code' => 'required|string|max:20|unique:wings,code',
+            'code' => 'required|string|max:50|unique:wings,code',
             'total_floors' => 'nullable|integer|min:0',
             'description' => 'nullable|string|max:500',
             'status' => 'nullable|boolean',
@@ -61,7 +70,7 @@ class WingController extends Controller
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:100|unique:wings,name,' . $wing->id,
-            'code' => 'sometimes|required|string|max:20|unique:wings,code,' . $wing->id,
+            'code' => 'sometimes|required|string|max:50|unique:wings,code,' . $wing->id,
             'total_floors' => 'nullable|integer|min:0',
             'description' => 'nullable|string|max:500',
             'status' => 'nullable|boolean',

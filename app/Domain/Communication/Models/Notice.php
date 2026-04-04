@@ -11,7 +11,7 @@ class Notice extends Model
     use HasUuid, HasSocietyScope;
 
     protected $fillable = [
-        'society_id', 'title', 'body', 'category', 'priority',
+        'society_id', 'title', 'body', 'category_id', 'category', 'priority',
         'target_audience', 'published_at', 'expires_at', 'created_by',
     ];
 
@@ -20,6 +20,7 @@ class Notice extends Model
         'expires_at' => 'datetime',
     ];
 
+    public function category()    { return $this->belongsTo(\App\Domain\Complaint\Models\ComplaintCategory::class, 'category_id'); }
     public function createdBy()   { return $this->belongsTo(\App\Models\User::class, 'created_by'); }
     public function attachments() { return $this->hasMany(NoticeAttachment::class); }
 

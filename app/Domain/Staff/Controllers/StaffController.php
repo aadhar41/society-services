@@ -3,21 +3,31 @@
 namespace App\Domain\Staff\Controllers;
 
 use App\Domain\Staff\Models\Staff;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class StaffController extends Controller
 {
+    use HasPagination;
+
+    /**
+     * Display a paginated, searchable listing of staff.
+     * Query params: search, category, status, per_page
+     */
     public function index(Request $request): JsonResponse
     {
-        $staff = Staff::when($request->category, fn($q, $c) => $q->where('category', $c))
-            ->get();
+        $staff = Staff::when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
+                $q->where('name', 'ilike', "%{$s}%")
+                  ->orWhere('phone', 'ilike', "%{$s}%");
+            }))
+            ->when($request->role, fn($q, $r) => $q->where('role', $r))
+            ->when($request->has('status'), fn($q) => $q->where('status', $request->boolean('status')))
+            ->orderBy('name')
+            ->paginate($this->perPage());
 
-        return response()->json([
-            'success' => true,
-            'data' => $staff
-        ]);
+        return $this->paginatedResponse($staff);
     }
 
     public function store(Request $request): JsonResponse
@@ -25,9 +35,11 @@ class StaffController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'phone' => 'required|string|max:20',
-            'category' => 'required|string|max:50',
+            'role' => 'required|string|max:50',
+            'department' => 'nullable|string|max:100',
             'salary' => 'nullable|numeric',
             'joining_date' => 'nullable|date',
+            'status' => 'nullable|boolean',
         ]);
 
         $staff = Staff::create($validated);
@@ -51,6 +63,10 @@ class StaffController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:100',
             'phone' => 'sometimes|required|string|max:20',
+            'role' => 'sometimes|required|string|max:50',
+            'department' => 'nullable|string|max:100',
+            'salary' => 'nullable|numeric',
+            'joining_date' => 'nullable|date',
             'status' => 'nullable|boolean',
         ]);
 

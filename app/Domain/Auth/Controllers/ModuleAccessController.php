@@ -37,7 +37,7 @@ class ModuleAccessController extends Controller
         }
 
         // Get user's role in this society
-        $membership = $user->societies()->where('erp_societies.id', $societyId)->first();
+        $membership = $user->societies()->where('erp_societies.id', (int) $societyId)->first();
         if (!$membership) {
              return response()->json(['success' => false, 'message' => 'Access denied to this society'], 403);
         }

@@ -10,7 +10,12 @@ class ComplaintCategory extends Model
 {
     use HasUuid, HasSocietyScope;
 
-    protected $fillable = ['society_id', 'name', 'description', 'sla_hours'];
+    protected $fillable = ['society_id', 'name', 'description', 'sla_hours', 'module'];
 
     protected $casts = ['sla_hours' => 'integer'];
+
+    public function scopeForModule($query, $module)
+    {
+        return $query->where('module', $module);
+    }
 }

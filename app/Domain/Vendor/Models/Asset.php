@@ -11,7 +11,7 @@ class Asset extends Model
     use HasUuid, HasSocietyScope;
 
     protected $fillable = [
-        'society_id', 'name', 'category', 'location', 'purchase_date',
+        'society_id', 'name', 'category_id', 'category', 'location', 'purchase_date',
         'purchase_price', 'current_value', 'condition', 'warranty_expires_at',
     ];
 
@@ -21,4 +21,6 @@ class Asset extends Model
         'current_value' => 'decimal:2',
         'warranty_expires_at' => 'date',
     ];
+
+    public function category() { return $this->belongsTo(\App\Domain\Complaint\Models\ComplaintCategory::class, 'category_id'); }
 }
