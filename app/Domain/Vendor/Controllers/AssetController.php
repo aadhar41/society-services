@@ -9,23 +9,30 @@ use Illuminate\Routing\Controller;
 
 class AssetController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $assets = Asset::with('category')
+            ->when($request->category_id, fn($q, $id) => $q->where('category_id', $id))
+            ->get();
+
         return response()->json([
             'success' => true,
-            'data' => Asset::all()
+            'data' => $assets
         ]);
     }
 
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'account_id' => 'required|exists:accounts,id',
-            'vendor_id' => 'required|exists:vendors,id',
+            'name' => 'required|string|max:100',
+            'category_id' => 'nullable|exists:complaint_categories,id',
+            'category' => 'nullable|string|max:50',
+            'location' => 'nullable|string|max:100',
             'purchase_date' => 'nullable|date',
             'purchase_price' => 'nullable|numeric',
-            'warranty_expiry' => 'nullable|date',
-            'status' => 'nullable|string|max:30',
+            'current_value' => 'nullable|numeric',
+            'condition' => 'nullable|in:new,good,fair,poor,disposed',
+            'warranty_expires_at' => 'nullable|date',
         ]);
 
         $asset = Asset::create($validated);
@@ -48,7 +55,11 @@ class AssetController extends Controller
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:100',
-            'status' => 'sometimes|required|string|max:30',
+            'category_id' => 'nullable|exists:complaint_categories,id',
+            'category' => 'nullable|string|max:50',
+            'location' => 'nullable|string|max:100',
+            'condition' => 'nullable|in:new,good,fair,poor,disposed',
+            'current_value' => 'nullable|numeric',
         ]);
 
         $asset->update($validated);

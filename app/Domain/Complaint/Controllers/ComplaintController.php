@@ -53,13 +53,6 @@ class ComplaintController extends Controller
                 ->first()?->id;
         }
 
-        if (!$memberId) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cannot raise complaint: No primary member found for this unit.'
-            ], 422);
-        }
-
         $complaint = Complaint::create(array_merge($validated, [
             'status' => 'open',
             'ticket_number' => 'TCK-' . strtoupper(uniqid()),

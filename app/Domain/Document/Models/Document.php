@@ -13,11 +13,12 @@ class Document extends Model
     protected $table = 'erp_documents';
 
     protected $fillable = [
-        'society_id', 'title', 'category', 'file_path',
+        'society_id', 'title', 'category_id', 'category', 'file_path',
         'uploaded_by', 'meeting_date', 'is_public',
     ];
 
     protected $casts = ['meeting_date' => 'date', 'is_public' => 'boolean'];
 
+    public function category()   { return $this->belongsTo(\App\Domain\Complaint\Models\ComplaintCategory::class, 'category_id'); }
     public function uploadedBy() { return $this->belongsTo(\App\Models\User::class, 'uploaded_by'); }
 }

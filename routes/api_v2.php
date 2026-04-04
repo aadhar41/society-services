@@ -121,7 +121,12 @@ Route::prefix('v2')->middleware('auth:sanctum')->group(function () {
         });
 
         // ─── Complaints ────────────────────────────────────────────
-        Route::apiResource('complaint-categories', \App\Domain\Complaint\Controllers\ComplaintCategoryController::class);
+        Route::get('complaint-categories', [\App\Domain\Complaint\Controllers\ComplaintCategoryController::class, 'index']);
+        Route::middleware('superadmin')->group(function () {
+            Route::post('complaint-categories', [\App\Domain\Complaint\Controllers\ComplaintCategoryController::class, 'store']);
+            Route::put('complaint-categories/{complaint_category}', [\App\Domain\Complaint\Controllers\ComplaintCategoryController::class, 'update']);
+            Route::delete('complaint-categories/{complaint_category}', [\App\Domain\Complaint\Controllers\ComplaintCategoryController::class, 'destroy']);
+        });
         Route::apiResource('complaints', \App\Domain\Complaint\Controllers\ComplaintController::class);
         Route::post('complaints/{complaint}/comments', [\App\Domain\Complaint\Controllers\ComplaintController::class, 'addComment']);
         Route::put('complaints/{complaint}/assign', [\App\Domain\Complaint\Controllers\ComplaintController::class, 'assign']);

@@ -18,11 +18,13 @@ class VendorController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $vendors = Vendor::when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
+        $vendors = Vendor::with('category')
+            ->when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
                 $q->where('name', 'ilike', "%{$s}%")
                   ->orWhere('company', 'ilike', "%{$s}%")
                   ->orWhere('phone', 'ilike', "%{$s}%");
             }))
+            ->when($request->category_id, fn($q, $id) => $q->where('category_id', $id))
             ->when($request->has('status'), fn($q) => $q->where('status', $request->boolean('status')))
             ->orderBy('name')
             ->paginate($this->perPage());
@@ -37,6 +39,7 @@ class VendorController extends Controller
             'contact_person' => 'required|string|max:100',
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:100',
+            'category_id' => 'nullable|exists:complaint_categories,id',
             'category' => 'nullable|string|max:50',
             'address' => 'nullable|string',
         ]);
@@ -61,7 +64,12 @@ class VendorController extends Controller
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:100',
+            'contact_person' => 'sometimes|required|string|max:100',
             'phone' => 'sometimes|required|string|max:20',
+            'email' => 'nullable|email|max:100',
+            'category_id' => 'nullable|exists:complaint_categories,id',
+            'category' => 'nullable|string|max:50',
+            'address' => 'nullable|string',
             'status' => 'nullable|boolean',
         ]);
 

@@ -13,19 +13,15 @@ class VisitorController extends Controller
 {
     use HasPagination;
 
-    /**
-     * GET /api/v2/visitors
-     * Query params: search, status, date, per_page
-     */
     public function index(Request $request): JsonResponse
     {
-        $visitors = Visitor::with(['unit.wing', 'preApprovedBy'])
+        $visitors = Visitor::with(['unit.wing', 'approvedBy', 'preApprovedBy'])
             ->when($request->search, fn($q, $s) => $q->where(function ($q) use ($s) {
                 $q->where('name', 'ilike', "%{$s}%")
                   ->orWhere('phone', 'ilike', "%{$s}%");
             }))
             ->when($request->status, fn($q, $s) => $q->where('status', $s))
-            ->when($request->date, fn($q, $d) => $q->whereDate('check_in', $d))
+            ->when($request->date, fn($q, $d) => $q->whereDate('check_in_at', $d))
             ->orderByDesc('created_at')
             ->paginate($this->perPage());
 
@@ -85,7 +81,7 @@ class VisitorController extends Controller
 
         $visitor->update([
             'status' => 'checked_in',
-            'check_in' => now(),
+            'check_in_at' => now(),
             'photo' => $validated['photo'] ?? null,
         ]);
 
@@ -103,7 +99,7 @@ class VisitorController extends Controller
     {
         $visitor->update([
             'status' => 'checked_out',
-            'check_out' => now(),
+            'check_out_at' => now(),
         ]);
 
         return response()->json([

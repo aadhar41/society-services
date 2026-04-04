@@ -9,11 +9,15 @@ use Illuminate\Routing\Controller;
 
 class ComplaintCategoryController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $categories = ComplaintCategory::when($request->module, function ($query, $module) {
+            return $query->forModule($module);
+        })->get();
+
         return response()->json([
             'success' => true,
-            'data' => ComplaintCategory::all()
+            'data' => $categories
         ]);
     }
 
@@ -22,6 +26,7 @@ class ComplaintCategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'description' => 'nullable|string|max:255',
+            'module' => 'nullable|string|max:50',
             'status' => 'nullable|boolean',
         ]);
 
@@ -47,6 +52,7 @@ class ComplaintCategoryController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:100',
             'description' => 'nullable|string|max:255',
+            'module' => 'sometimes|required|string|max:50',
             'status' => 'nullable|boolean',
         ]);
 
