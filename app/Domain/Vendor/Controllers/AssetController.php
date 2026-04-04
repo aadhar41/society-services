@@ -35,11 +35,13 @@ class AssetController extends Controller
             'warranty_expires_at' => 'nullable|date',
         ]);
 
-        $asset = Asset::create($validated);
+        $asset = Asset::create(array_merge($validated, [
+            'category_id' => ($validated['category_id'] ?? null) ?: null,
+        ]));
 
         return response()->json([
             'success' => true,
-            'data' => $asset
+            'data' => $asset->load('category')
         ], 201);
     }
 
@@ -62,11 +64,15 @@ class AssetController extends Controller
             'current_value' => 'nullable|numeric',
         ]);
 
+        if (array_key_exists('category_id', $validated)) {
+            $validated['category_id'] = ($validated['category_id'] ?? null) ?: null;
+        }
+
         $asset->update($validated);
 
         return response()->json([
             'success' => true,
-            'data' => $asset
+            'data' => $asset->load('category')
         ]);
     }
 

@@ -34,10 +34,10 @@ class DocumentController extends Controller
         $path = $request->file('file')->store('society-docs', 'public');
 
         $doc = Document::create([
-            'society_id' => $request->header('X-Society-Id'), // Use society scope
+            'society_id' => $request->header('X-Society-Id'), 
             'title' => $validated['title'],
-            'category_id' => $validated['category_id'] ?? null,
-            'category' => $validated['category'] ?? null,
+            'category_id' => ($validated['category_id'] ?? null) ?: null,
+            'category' => ($validated['category'] ?? null) ?: null,
             'file_path' => $path,
             'uploaded_by' => \Illuminate\Support\Facades\Auth::id(),
             'file_type' => $request->file('file')->getMimeType(),
@@ -65,6 +65,14 @@ class DocumentController extends Controller
             'category_id' => 'nullable|exists:complaint_categories,id',
             'category' => 'nullable|string',
         ]);
+
+        if (array_key_exists('category_id', $validated)) {
+            $validated['category_id'] = ($validated['category_id'] ?? null) ?: null;
+        }
+
+        if (array_key_exists('category', $validated)) {
+            $validated['category'] = ($validated['category'] ?? null) ?: null;
+        }
 
         $document->update($validated);
 

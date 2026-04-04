@@ -44,11 +44,13 @@ class VendorController extends Controller
             'address' => 'nullable|string',
         ]);
 
-        $vendor = Vendor::create($validated);
+        $vendor = Vendor::create(array_merge($validated, [
+            'category_id' => ($validated['category_id'] ?? null) ?: null,
+        ]));
 
         return response()->json([
             'success' => true,
-            'data' => $vendor
+            'data' => $vendor->load('category')
         ], 201);
     }
 
@@ -73,11 +75,15 @@ class VendorController extends Controller
             'status' => 'nullable|boolean',
         ]);
 
+        if (array_key_exists('category_id', $validated)) {
+            $validated['category_id'] = ($validated['category_id'] ?? null) ?: null;
+        }
+
         $vendor->update($validated);
 
         return response()->json([
             'success' => true,
-            'data' => $vendor
+            'data' => $vendor->load('category')
         ]);
     }
 

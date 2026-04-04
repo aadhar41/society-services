@@ -14,11 +14,12 @@ class Staff extends Model
 
     protected $fillable = [
         'society_id', 'user_id', 'name', 'phone', 'role',
-        'department', 'salary', 'joining_date', 'status',
+        'department', 'salary', 'joining_date', 'status', 'category_id',
     ];
 
     protected $casts = ['salary' => 'decimal:2', 'joining_date' => 'date', 'status' => 'boolean'];
 
     public function user()       { return $this->belongsTo(\App\Models\User::class); }
+    public function category()   { return $this->belongsTo(\App\Domain\Complaint\Models\ComplaintCategory::class, 'category_id'); }
     public function attendance() { return $this->hasMany(StaffAttendance::class); }
 }

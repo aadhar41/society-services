@@ -28,13 +28,14 @@ class NoticeController extends Controller
         ]);
 
         $notice = Notice::create(array_merge($validated, [
+            'category_id' => ($validated['category_id'] ?? null) ?: null,
             'created_by' => \Illuminate\Support\Facades\Auth::id(),
             'published_at' => now(),
         ]));
 
         return response()->json([
             'success' => true,
-            'data' => $notice
+            'data' => $notice->load('category')
         ], 201);
     }
 
@@ -56,11 +57,15 @@ class NoticeController extends Controller
             'expires_at' => 'nullable|date',
         ]);
 
+        if (array_key_exists('category_id', $validated)) {
+            $validated['category_id'] = ($validated['category_id'] ?? null) ?: null;
+        }
+
         $notice->update($validated);
 
         return response()->json([
             'success' => true,
-            'data' => $notice
+            'data' => $notice->load('category')
         ]);
     }
 
