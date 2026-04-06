@@ -21,12 +21,14 @@ class Payment extends Model
         'amount',
         'payment_date',
         'payment_method',
+        'payment_type',
         'transaction_reference',
         'cheque_no',
         'bank_name',
         'receipt_number',
         'journal_entry_id',
         'status',
+        'attachment_path',
         'notes',
     ];
 

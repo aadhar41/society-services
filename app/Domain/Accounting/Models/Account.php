@@ -38,6 +38,11 @@ class Account extends Model
         return $this->belongsTo(AccountGroup::class);
     }
 
+    public function group()
+    {
+        return $this->accountGroup();
+    }
+
     public function journalEntryLines()
     {
         return $this->hasMany(JournalEntryLine::class);

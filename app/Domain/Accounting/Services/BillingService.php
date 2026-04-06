@@ -137,6 +137,8 @@ class BillingService
                 'amount' => $paymentData['amount'],
                 'payment_date' => $paymentData['payment_date'] ?? now(),
                 'payment_method' => $paymentData['payment_method'],
+                'payment_type' => $paymentData['payment_type'] ?? 'maintenance',
+                'attachment_path' => $paymentData['attachment_path'] ?? null,
                 'transaction_reference' => $paymentData['transaction_reference'] ?? null,
                 'cheque_no' => $paymentData['cheque_no'] ?? null,
                 'bank_name' => $paymentData['bank_name'] ?? null,
@@ -157,6 +159,99 @@ class BillingService
 
             return $payment;
         });
+    }
+
+    /**
+     * Record a standalone payment not tied to specific invoice.
+     */
+    public function recordCategorizedPayment(array $paymentData, int $societyId): Payment
+    {
+        return DB::transaction(function () use ($paymentData, $societyId) {
+            $payment = Payment::create([
+                'society_id' => $societyId,
+                'unit_id' => $paymentData['unit_id'] ?? null,
+                'member_id' => $paymentData['member_id'] ?? null,
+                'amount' => $paymentData['amount'],
+                'payment_date' => $paymentData['payment_date'] ?? now(),
+                'payment_method' => $paymentData['payment_method'],
+                'payment_type' => $paymentData['payment_type'] ?? 'other',
+                'attachment_path' => $paymentData['attachment_path'] ?? null,
+                'transaction_reference' => $paymentData['transaction_reference'] ?? null,
+                'receipt_number' => $this->generateReceiptNumber($societyId),
+                'status' => 'confirmed',
+                'notes' => $paymentData['notes'] ?? null,
+            ]);
+
+            $this->createCategorizedPaymentJournalEntry($payment);
+
+            return $payment;
+        });
+    }
+
+    /**
+     * Create journal entry for standalone categorized payment.
+     */
+    private function createCategorizedPaymentJournalEntry(Payment $payment): void
+    {
+        $societyId = $payment->society_id;
+
+        // Debit: Cash/Bank
+        $debitAccountCode = match ($payment->payment_method) {
+            'cash' => 'cash-in-hand',
+            default => 'bank-account',
+        };
+
+        // Credit: Specific Income account
+        $creditAccountCode = match ($payment->payment_type) {
+            'maintenance' => 'maintenance-income',
+            'road_construction' => 'misc-income', // Could map to specific group if exists
+            'event' => 'facility-booking-income',
+            'security' => 'security-deposits', // This is a liability, but fine for now
+            default => 'misc-income',
+        };
+
+        try {
+            $debitAccount = $this->getSystemAccount($societyId, $debitAccountCode);
+        } catch (\DomainException $e) {
+            // Fallback for societies that haven't run full seeder
+            $debitAccount = \App\Domain\Accounting\Models\Account::where('society_id', $societyId)
+                ->where('name', 'like', '%' . ($payment->payment_method === 'cash' ? 'Cash' : 'Bank') . '%')
+                ->first() ?? throw $e;
+        }
+
+        try {
+            $creditAccount = $this->getSystemAccount($societyId, $creditAccountCode);
+        } catch (\DomainException $e) {
+             $creditAccount = \App\Domain\Accounting\Models\Account::where('society_id', $societyId)
+                ->where('code', 'ACC-MAINT')
+                ->first() ?? throw $e;
+        }
+
+        $entry = $this->accountingService->createJournalEntry([
+            'society_id' => $societyId,
+            'date' => $payment->payment_date->format('Y-m-d'),
+            'narration' => "Categorized Payment [{$payment->payment_type}] - Receipt {$payment->receipt_number}",
+            'entry_type' => 'payment',
+            'reference_type' => Payment::class,
+            'reference_id' => $payment->id,
+            'lines' => [
+                [
+                    'account_id' => $debitAccount->id,
+                    'debit' => (float) $payment->amount,
+                    'credit' => 0,
+                    'narration' => "Payment via {$payment->payment_method}",
+                ],
+                [
+                    'account_id' => $creditAccount->id,
+                    'debit' => 0,
+                    'credit' => (float) $payment->amount,
+                    'narration' => "Categorized as {$payment->payment_type}",
+                ],
+            ],
+        ]);
+
+        $this->accountingService->postEntry($entry);
+        $payment->update(['journal_entry_id' => $entry->id]);
     }
 
     /**
