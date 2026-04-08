@@ -9,6 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class MemberController extends Controller
 {
@@ -39,22 +41,46 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'unit_id' => 'required|exists:units,id',
-            'user_id' => 'nullable|exists:users,id',
-            'member_type' => 'required|in:owner,tenant,family_member,other',
+            'member_type' => 'required|in:owner,tenant,family',
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
+            'email' => 'nullable|email|max:255|unique:users,email',
+            'password' => 'nullable|string|min:8',
             'is_primary' => 'nullable|boolean',
             'move_in_date' => 'nullable|date',
         ]);
 
-        $member = Member::create($validated);
+        return \DB::transaction(function () use ($validated, $request) {
+            $userId = null;
+            
+            if (!empty($validated['email']) && !empty($validated['password'])) {
+                $user = \App\Models\User::create([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'password' => \Hash::make($validated['password']),
+                ]);
+                
+                // Assign as Resident/Member (Role ID 2) to current society
+                $user->societies()->attach($request->header('X-Society-Id'), [
+                    'role_id' => 2,
+                    'joined_at' => now(),
+                    'status' => true
+                ]);
+                
+                $userId = $user->id;
+            }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Member added successfully.',
-            'data' => $member
-        ], 201);
+            $member = Member::create(array_merge($validated, [
+                'user_id' => $userId,
+                'society_id' => $request->header('X-Society-Id')
+            ]));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Member added' . ($userId ? ' with user account' : '') . ' successfully.',
+                'data' => $member
+            ], 201);
+        });
     }
 
     public function show(Member $member): JsonResponse
@@ -68,7 +94,7 @@ class MemberController extends Controller
     public function update(Request $request, Member $member): JsonResponse
     {
         $validated = $request->validate([
-            'member_type' => 'sometimes|required|in:owner,tenant,family_member,other',
+            'member_type' => 'sometimes|required|in:owner,tenant,family',
             'name' => 'sometimes|required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',

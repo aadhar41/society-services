@@ -24,6 +24,7 @@ class ModuleSeeder extends Seeder
             ['name' => 'Members', 'slug' => 'members', 'description' => 'Resident directory and documents.', 'is_active' => true],
             ['name' => 'Staff & Vendors', 'slug' => 'staff', 'description' => 'Manage service providers and staff.', 'is_active' => true],
             ['name' => 'Documents', 'slug' => 'documents', 'description' => 'Society bylaws and certificates.', 'is_active' => true],
+            ['name' => 'Security', 'slug' => 'security', 'description' => 'Role and User management.', 'is_active' => true],
         ];
 
         foreach ($modules as $m) {
@@ -43,12 +44,23 @@ class ModuleSeeder extends Seeder
         // Enable all modules for admin role by default
         $adminRole = SystemRole::where('slug', 'admin')->first();
         $allModules = Module::all();
-        
+
         foreach ($allModules as $module) {
             DB::table('erp_role_modules')->updateOrInsert(
                 ['role_id' => $adminRole->id, 'module_id' => $module->id],
                 ['is_enabled' => true]
             );
+        }
+
+        // Sync all modules to all existing societies (so new modules are visible right away)
+        $allSocietyIds = DB::table('erp_societies')->pluck('id');
+        foreach ($allSocietyIds as $societyId) {
+            foreach ($allModules as $module) {
+                DB::table('erp_society_modules')->updateOrInsert(
+                    ['society_id' => $societyId, 'module_id' => $module->id],
+                    ['is_enabled' => true, 'updated_at' => now()]
+                );
+            }
         }
     }
 }

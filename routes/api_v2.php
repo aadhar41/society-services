@@ -160,6 +160,13 @@ Route::prefix('v2')->middleware('auth:sanctum')->group(function () {
         Route::apiResource('vendors.contracts', \App\Domain\Vendor\Controllers\VendorContractController::class);
         Route::apiResource('assets', \App\Domain\Vendor\Controllers\AssetController::class);
 
+        // ─── Security & Users (Society-scoped) ─────────────────────
+        Route::get('society-users', [\App\Domain\Auth\Controllers\SocietyUserController::class, 'index']);
+        Route::post('society-users', [\App\Domain\Auth\Controllers\SocietyUserController::class, 'store']);
+        Route::put('society-users/{user}', [\App\Domain\Auth\Controllers\SocietyUserController::class, 'update']);
+        Route::delete('society-users/{user}', [\App\Domain\Auth\Controllers\SocietyUserController::class, 'destroy']);
+        Route::get('society-roles', [\App\Domain\Auth\Controllers\SocietyUserController::class, 'roles']);
+
         // ─── Audit Logs ────────────────────────────────────────────
         Route::get('audit-logs', [\App\Domain\Audit\Controllers\AuditController::class, 'index']);
     });

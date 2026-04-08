@@ -7,6 +7,8 @@ use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
@@ -36,7 +38,9 @@ class StaffController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'phone' => 'required|string|max:20',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255|unique:users,email',
+            'password' => 'nullable|string|min:8',
             'role' => 'required|string|max:50',
             'category_id' => 'nullable|exists:complaint_categories,id',
             'department' => 'nullable|string|max:100',
@@ -45,14 +49,38 @@ class StaffController extends Controller
             'status' => 'nullable|boolean',
         ]);
 
-        $staff = Staff::create(array_merge($validated, [
-            'category_id' => ($validated['category_id'] ?? null) ?: null,
-        ]));
+        return \DB::transaction(function () use ($validated, $request) {
+            $userId = null;
+            
+            if (!empty($validated['email']) && !empty($validated['password'])) {
+                $user = \App\Models\User::create([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'password' => \Hash::make($validated['password']),
+                ]);
+                
+                // Assign as Staff (Role ID 3) to current society
+                $user->societies()->attach($request->header('X-Society-Id'), [
+                    'role_id' => 3,
+                    'joined_at' => now(),
+                    'status' => true
+                ]);
+                
+                $userId = $user->id;
+            }
 
-        return response()->json([
-            'success' => true,
-            'data' => $staff->load('category')
-        ], 201);
+            $staff = Staff::create(array_merge($validated, [
+                'user_id' => $userId,
+                'society_id' => $request->header('X-Society-Id'),
+                'category_id' => ($validated['category_id'] ?? null) ?: null,
+            ]));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Staff added' . ($userId ? ' with user account' : '') . ' successfully.',
+                'data' => $staff->load('category')
+            ], 201);
+        });
     }
 
     public function show(Staff $staff): JsonResponse

@@ -22,11 +22,14 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'is_superadmin' => (bool)$this->is_superadmin,
-            'societies' => $this->societies,
+            'id'           => $this->id,
+            'name'         => $this->name,
+            'email'        => $this->email,
+            'phone'        => $this->phone,
+            'avatar'       => $this->avatar,
+            'is_superadmin'=> (bool)$this->is_superadmin,
+            'license_id'   => $this->license_id,
+            'societies'    => $this->societies,
         ];
     }
 }

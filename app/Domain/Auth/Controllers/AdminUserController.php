@@ -62,6 +62,29 @@ class AdminUserController extends Controller
             'license_id' => 'nullable|exists:licenses,id',
         ]);
 
+        // Validation: If license is being changed, check if current societies exceed new limit
+        if (isset($validated['license_id']) && $validated['license_id'] !== $user->license_id) {
+            $newLicense = License::find($validated['license_id']);
+            $currentCount = $user->societies()->count();
+            if ($newLicense && $currentCount > $newLicense->max_societies) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Cannot change license. User has {$currentCount} societies, but the selected license only allows {$newLicense->max_societies}.",
+                ], 422);
+            }
+        }
+
+        // Validation: If license is being removed (set to No License), ensure they have at least 1 society or will have one
+        if (array_key_exists('license_id', $validated) && is_null($validated['license_id'])) {
+            $currentCount = $user->societies()->count();
+            if ($currentCount === 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Users with No License must be assigned to at least one society.",
+                ], 422);
+            }
+        }
+
         $user->update($validated);
 
         return response()->json([
@@ -78,8 +101,27 @@ class AdminUserController extends Controller
     {
         $validated = $request->validate([
             'society_id' => 'required|exists:erp_societies,id',
-            'role_id' => 'required|integer', // e.g., 1 for Admin, 2 for Member
+            'role_id' => 'required|in:1', // Only Society Administrator (1) can be assigned via Master Admin
         ]);
+
+        // Validation: Check license limits
+        $currentCount = $user->societies()->count();
+        if ($user->license) {
+            if ($currentCount >= $user->license->max_societies) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "License limit reached. This user can only be assigned to {$user->license->max_societies} society(ies).",
+                ], 422);
+            }
+        } else {
+            // For No License, let's assume a limit of 1 for now as per requirements
+            if ($currentCount >= 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Users with No License can only be assigned to 1 society.",
+                ], 422);
+            }
+        }
 
         $user->societies()->syncWithoutDetaching([
             $validated['society_id'] => [
@@ -103,6 +145,17 @@ class AdminUserController extends Controller
         $validated = $request->validate([
             'society_id' => 'required|exists:erp_societies,id',
         ]);
+
+        // Validation: Prevent unassigning last society for No License users
+        if (is_null($user->license_id)) {
+            $currentCount = $user->societies()->count();
+            if ($currentCount <= 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Users with No License must have at least one assigned society.",
+                ], 422);
+            }
+        }
 
         $user->societies()->detach($validated['society_id']);
 
