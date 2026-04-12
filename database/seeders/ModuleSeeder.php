@@ -42,14 +42,27 @@ class ModuleSeeder extends Seeder
         }
 
         // Enable all modules for admin role by default
-        $adminRole = SystemRole::where('slug', 'admin')->first();
-        $allModules = Module::all();
+        $adminRole   = SystemRole::where('slug', 'admin')->first();
+        $councilRole = SystemRole::where('slug', 'council')->first();
+        $staffRole   = SystemRole::where('slug', 'staff')->first();
+        $allModules  = Module::all();
+        $securityMod = Module::where('slug', 'security')->first();
 
         foreach ($allModules as $module) {
             DB::table('erp_role_modules')->updateOrInsert(
                 ['role_id' => $adminRole->id, 'module_id' => $module->id],
                 ['is_enabled' => true]
             );
+        }
+
+        // Explicitly DISABLE 'security' for council and staff (admin-only module)
+        foreach ([$councilRole, $staffRole] as $restrictedRole) {
+            if ($restrictedRole && $securityMod) {
+                DB::table('erp_role_modules')->updateOrInsert(
+                    ['role_id' => $restrictedRole->id, 'module_id' => $securityMod->id],
+                    ['is_enabled' => false]
+                );
+            }
         }
 
         // Sync all modules to all existing societies (so new modules are visible right away)
